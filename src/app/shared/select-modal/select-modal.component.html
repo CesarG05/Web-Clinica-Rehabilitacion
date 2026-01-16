@@ -1,0 +1,27 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-content">
+    <h2>{{ title }}</h2>
+
+    <form class="options-list">
+      @for (option of options; track option.value) {
+        <label class="option-item">
+          <input
+            type="radio"
+            name="selection"
+            [value]="option.value"
+            [(ngModel)]="selectedValue"
+          />
+          <span>{{ option.label }}</span>
+        </label>
+      }
+    </form>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cancel.emit()">{{ cancelText }}</button>
+      <button class="btn-confirm" (click)="onConfirm()" [disabled]="!selectedValue">
+        {{ confirmText }}
+      </button>
+    </div>
+  </div>
+</div>
+

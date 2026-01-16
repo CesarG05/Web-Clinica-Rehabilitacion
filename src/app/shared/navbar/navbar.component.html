@@ -1,0 +1,128 @@
+<nav class="navbar">
+  <div class="navbar-left">
+    <button class="hamburger" (click)="toggleMenu()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path fill="currentColor" d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
+      </svg>
+    </button>
+
+    <a class="nav-item" routerLink="/inicio" [class.active]="isActive('/inicio')">
+      <img style="mask-image: url('assets/icons/home.png'); -webkit-mask-image: url('assets/icons/home.png');" alt="Inicio"/>
+      Inicio
+    </a>
+
+    <a class="nav-item" routerLink="/pacientes" [class.active]="isActive('/pacientes')">
+      <img style="mask-image: url('assets/icons/pacientes.png'); -webkit-mask-image: url('assets/icons/pacientes.png');" alt="Pacientes"/>
+      Pacientes
+    </a>
+
+    <a class="nav-item" routerLink="/servicios" [class.active]="isActive('/servicios')">
+      <img style="mask-image: url('assets/icons/servicios.png'); -webkit-mask-image: url('assets/icons/servicios.png');" alt="Servicios" />
+      Servicios
+    </a>
+
+    @if (user?.rol !== 'fisioterapeuta') {
+      <a class="nav-item" routerLink="/pagos" [class.active]="isActive('/pagos')">
+        <img style="mask-image: url('assets/icons/transacciones.png'); -webkit-mask-image: url('assets/icons/transacciones.png');" alt="Transacciones"/>
+        Transacciones
+      </a>
+    }
+
+    @if (user?.rol === 'administrador') {
+      <a class="nav-item" routerLink="/reportes" [class.active]="isActive('/reportes')">
+        <img style="mask-image: url('assets/icons/reportes.png'); -webkit-mask-image: url('assets/icons/reportes.png');" alt="Reportes"/>
+        Reportes
+      </a>
+
+      <a class="nav-item" routerLink="/usuarios" [class.active]="isActive('/usuarios')">
+        <img style="mask-image: url('assets/icons/usuarios.png'); -webkit-mask-image: url('assets/icons/usuarios.png');" alt="Usuarios"/>
+        Usuarios
+      </a>
+    }
+  </div>
+
+  <div class="navbar-right">
+    <div class="logo-container">
+      <img src="favicon.svg" alt="Logo" class="logo" />
+    </div>
+  </div>
+</nav>
+
+<!-- Drawer + overlay -->
+<div class="drawer-overlay" [class.open]="menuOpen" (click)="closeMenu()"></div>
+
+<div class="drawer" [class.open]="menuOpen">
+  <!-- Header con avatar y usuario -->
+  <div class="drawer-header">
+    <div class="avatar">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 12q-1.65 0-2.825-1.175T8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12m-8 6v-.8q0-.85.438-1.562T5.6 14.55q1.55-.775 3.15-1.162T12 13t3.25.388t3.15 1.162q.725.375 1.163 1.088T20 17.2v.8q0 .825-.587 1.413T18 20H6q-.825 0-1.412-.587T4 18" />
+      </svg>
+    </div>
+    <div class="user-info">
+      <h3>{{ user?.nombre }} {{ user?.primerApellido }}</h3>
+      <p>{{ user?.correoElectronico }}</p>
+    </div>
+  </div>
+
+  <p class="title-menu">General</p>
+
+  <!-- Contenido del menú -->
+  <div class="drawer-content">
+
+    <app-drawer-item
+      routerLink="/inicio/perfil"
+      [active]="isActive('/perfil')"
+      icon="perfil"
+      title="Perfil"
+      subtitle="Administrar información del perfil"
+      color="#07f"
+      (itemClick)="closeMenu()">
+    </app-drawer-item>
+
+    <app-drawer-item
+      routerLink="/inicio/info-clinica"
+      [active]="isActive('/info-clinica')"
+      icon="clinic"
+      title="Clínica"
+      subtitle="Información sobre la clínica"
+      color="#9109db"
+      (itemClick)="closeMenu()">
+    </app-drawer-item>
+
+    <!-- <app-drawer-item
+      routerLink="/usuarios"
+      [active]="isActive('/usuarios')"
+      icon="users"
+      title="Usuarios"
+      subtitle="Administrar usuarios de la clinica"
+      color="#d59114"
+      (itemClick)="closeMenu()">
+    </app-drawer-item> -->
+
+    <!-- Otros items aquí... -->
+
+  </div>
+
+  <!-- Botón Cerrar sesión al fondo -->
+  <div class="drawer-footer">
+    <a (click)="logout()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z" />
+      </svg>
+      Cerrar sesión
+    </a>
+  </div>
+</div>
+
+  <!-- Modal de confirmación -->
+  @if (showModal()) {
+    <app-confirm-modal
+      title="Cerrar sesión"
+      message="¿Seguro que deseas cerrar tu sesión?"
+      confirmText="Confirmar"
+      cancelText="Cancelar"
+      (confirm)="confirmLogout()"
+      (cancel)="cancelLogout()"
+    />
+  }

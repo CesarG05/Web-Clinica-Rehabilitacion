@@ -1,0 +1,17 @@
+<div class="input-wrapper">
+  @if(iconPath){
+    <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <path fill="currentColor" [attr.d]="iconPath" />
+    </svg>
+  }
+
+  <input
+    [type]="type"
+    [value]="model"
+    (input)="onInputChange($event)"
+    (keydown)="onKeyDown($event)"
+    [class.has-content]="model && model.length > 0"
+  />
+
+  <label>{{ label }}</label>
+</div>

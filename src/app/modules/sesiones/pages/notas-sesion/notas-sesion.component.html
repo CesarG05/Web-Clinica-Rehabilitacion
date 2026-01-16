@@ -1,0 +1,119 @@
+<div class="notas-container">
+
+    <app-back-header titulo="Notas de la sesión"></app-back-header>
+
+    <!-- Top bar -->
+    <div class="top-bar">
+
+        <div class="session-info">
+            <div class="info-item">
+                <span class="label">Paciente</span>
+                <span class="value">{{ sesion()?.paciente?.nombrePaciente }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="label">Servicio</span>
+                <span class="value">{{ sesion()?.servicio?.nombreServicio }}</span>
+            </div>
+        </div>
+
+
+        <button class="btn-agregar" (click)="abrirModalNota()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 21q-.425 0-.712-.288T11 20v-7H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7V4q0-.425.288-.712T12 3t.713.288T13 4v7h7q.425 0 .713.288T21 12t-.288.713T20 13h-7v7q0 .425-.288.713T12 21" />
+        </svg>
+        <span>Agregar nota</span>
+        </button>
+    </div>
+
+    <div class="notas-content">
+
+        <div class="centered-content">
+            <!-- Loader -->
+            @if (cargando) {
+                <div class="loader">
+                <img src="assets/loaders/circles.svg" alt="Cargando notas..." />
+                <p>Cargando notas...</p>
+                </div>
+            }
+
+            <!-- Sin resultados -->
+            @if (!cargando && sesion() && sesion()!.notas.length === 0) {
+                <div class="no-results">
+                    <p>No hay notas registradas para esta sesión.</p>
+                </div>
+            }
+        </div>
+
+    <!-- Notas -->
+    @if (!cargando && sesion() && sesion()!.notas.length > 0) {
+    <div class="cards-grid">
+        @for (nota of sesion()!.notas; track nota.id) {
+        <div class="note-card">
+
+            <button
+            class="delete-btn"
+            title="Eliminar nota"
+            (click)="eliminarNota(nota.id)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zm-7 11q.425 0 .713-.288T11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17m4 0q.425 0 .713-.288T15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17M7 6v13z" />
+            </svg>
+            </button>
+
+            <div class="note-header">
+                <strong>{{ nota.autor }}</strong>
+                <span>{{ nota.fecha | date:'dd/MM/yyyy' }}</span>
+            </div>
+
+            <p class="note-text">{{ nota.notas }}</p>
+
+        </div>
+        }
+    </div>
+    }
+
+    </div>
+</div>
+
+<!-- Confirm Modal -->
+@if(modalAbierto) {
+<app-confirm-modal
+  [title]="modalTitle"
+  [message]="modalMessage"
+  (confirm)="modalConfirmCallback && modalConfirmCallback(); cerrarModal()"
+  (cancel)="cerrarModal()">
+</app-confirm-modal>
+}
+
+
+@if (modalNotaAbierto) {
+  <div class="modal-backdrop" (click)="cerrarModalNota()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+
+      <h2>Nueva nota</h2>
+
+      <textarea
+        class="textarea-modal"
+        [(ngModel)]="notaTexto"
+        placeholder="Escribe la nota de la sesión..."
+        rows="6">
+      </textarea>
+
+      <div class="modal-actions">
+        <button
+          class="btn-cancel"
+          (click)="cerrarModalNota()">
+          Cancelar
+        </button>
+
+        <button
+          class="btn-confirm"
+          [disabled]="guardandoNota || !notaTexto.trim()"
+          (click)="guardarNota()">
+          {{ guardandoNota ? 'Guardando…' : 'Guardar' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

@@ -1,0 +1,131 @@
+@use 'variables' as *;
+
+.item {
+    position: relative;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .item-top {
+    display: flex;
+    align-items: center;
+  }
+
+  .left-info {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .servicio {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .estado {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    white-space: nowrap;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+
+    &.realizada {
+      background-color: $color-sucess;
+    }
+
+    &.pendiente {
+      background-color: #f1c40f;
+    }
+
+    &.cancelada {
+      background-color: $color-error;
+    }
+  }
+
+  .estado-texto {
+    font-size: .8rem;
+    font-weight: 500;
+    color: $color-text-secundary;
+  }
+
+  .menu {
+    position: relative;
+    margin-left: auto;
+
+    .menu-btn {
+      background: none;
+      border: none;
+      color: $color-text-secundary;
+      cursor: pointer;
+      padding: 0.2rem;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $color-text;
+      }
+    }
+
+    .menu-dropdown {
+      position: absolute;
+      top: 1.5rem;
+      right: 0;
+      background-color: $color-bg-secundary;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      min-width: 160px;
+      z-index: 20;
+      padding: 0.3rem 0;
+
+      button {
+        background: none;
+        border: none;
+        text-align: left;
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        color: $color-text;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        &.delete {
+          color: $color-error;
+
+          &:hover {
+            background-color: rgba(255, 0, 0, 0.08);
+          }
+        }
+      }
+    }
+  }
+  
+  .info-sesion {
+    color: $color-text-secundary;
+    font-size: 1rem;
+    margin: .5rem;
+  }
+
+  .empty {
+    color: $color-text-secundary;
+    font-style: italic;
+    padding: 1rem 0;
+  }
+
+:host {
+  display: block;
+}
+
+:host(:last-child) .item {
+  border-bottom: none;
+  margin-bottom: 1rem;
+}

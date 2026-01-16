@@ -1,0 +1,160 @@
+<div class="usuarios-container">
+
+  <!-- Encabezado  -->
+  <app-back-header titulo="Lista de usuarios"></app-back-header>
+
+  <!-- Buscador y botón agregar -->
+  <div class="top-bar">
+    <app-input-field
+      type="text"
+      label="Buscar usuario"
+      [iconPath]="'M10 2a8 8 0 1 0 5.29 14.29l4.15 4.15l1.41-1.41l-4.15-4.15A8 8 0 0 0 10 2m0 2a6 6 0 1 1 0 12A6 6 0 0 1 10 4Z'"
+      [(model)]="searchText"
+      (search)="buscar($event)">
+    </app-input-field>
+
+    <button class="btn-agregar" routerLink="nuevo-usuario">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 21q-.425 0-.712-.288T11 20v-7H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7V4q0-.425.288-.712T12 3t.713.288T13 4v7h7q.425 0 .713.288T21 12t-.288.713T20 13h-7v7q0 .425-.288.713T12 21" />
+      </svg>
+      <span>Nuevo usuario</span>
+    </button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters">
+    <div class="buttons">
+      <button [class.active]="accesoFilter === true" (click)="cambiarFiltro(true)">Habilitados</button>
+      <button [class.active]="accesoFilter === false" (click)="cambiarFiltro(false)">Bloqueados</button>
+      <button [class.active]="accesoFilter === null" (click)="cambiarFiltro(null)">Todos</button>
+    </div>
+
+    <div class="orden">
+      <label for="orden">Ordenar:</label>
+      <select id="orden" [(ngModel)]="orden" (change)="cambiarOrden(orden)">
+        <option value="recientes">Recientes</option>
+        <option value="a-z">A - Z</option>
+        <option value="z-a">Z - A</option>
+      </select>
+    </div>
+
+    <p class="total">Total : {{ total() }}</p>
+  </div>
+
+   <!-- Loader -->
+  @if (cargando) {
+    <div class="loader">
+      <img src="assets/loaders/circles.svg" alt="Cargando..." />
+      <p>Cargando usuarios...</p>
+    </div>
+  }
+
+  <!-- Sin resultados -->
+  @if (!cargando && usuarios().length === 0) {
+    <div class="no-results">
+      <p>No hay usuarios encontrados</p>
+    </div>
+  }
+
+  <!-- Grid de cards de usuario -->
+ @if (!cargando && usuarios().length > 0) {
+  <div class="usuarios-grid">
+    @for (usuario of usuarios(); track usuario.id) {
+      <div class="usuario-card" [class.habilitado]="usuario.acceso" [class.bloqueado]="!usuario.acceso">
+        
+        <!-- Sección superior -->
+        <div class="card-header">
+          <div class="info">
+            <h3>{{ usuario.primerApellido }} {{ usuario.segundoApellido }} {{ usuario.nombre }}</h3>
+
+            <p class="user-line">
+              {{ usuario.nombreUsuario }}
+              <span class="separator">|</span>
+              <span class="estado-inline" [class.activo]="usuario.acceso" [class.bloqueado]="!usuario.acceso">
+                <span class="status-dot"  [class.activo]="usuario.acceso" [class.bloqueado]="!usuario.acceso"></span>
+                <span class="status-text">{{ usuario.acceso ? 'Con acceso' : 'Bloqueado' }}</span>
+              </span>
+            </p>
+          </div>
+
+          <!-- Menú de opciones -->
+           <div class="menu">
+            <button class="menu-btn" (click)="toggleMenu(usuario.id, $event)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="3.75" d="M12 12h.01v.01H12zm0-7h.01v.01H12zm0 14h.01v.01H12z" />
+              </svg>
+            </button>
+          
+            @if (menuAbiertoId() === usuario.id) {
+              <div class="menu-dropdown">
+                <button (click)="cambiarAcceso(usuario)">
+                  {{ usuario.acceso ? 'Bloquear usuario' : 'Habilitar usuario' }}
+                </button>
+                <button (click)="cambiarRol(usuario)">Cambiar rol</button>
+                <button class="delete" (click)="eliminarUsuario(usuario)">Eliminar</button>
+              </div>
+            }
+          </div>  
+        </div>
+
+        <hr />
+
+        <!-- Sección inferior -->
+        <div class="card-footer">
+          <div class="rol">
+            <label>Rol</label>
+            <p>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 12q-1.65 0-2.825-1.175T8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12m-8 6v-.8q0-.85.438-1.562T5.6 14.55q1.55-.775 3.15-1.162T12 13t3.25.388t3.15 1.162q.725.375 1.163 1.088T20 17.2v.8q0 .825-.587 1.413T18 20H6q-.825 0-1.412-.587T4 18m2 0h12v-.8q0-.275-.137-.5t-.363-.35q-1.35-.675-2.725-1.012T12 15t-2.775.338T6.5 16.35q-.225.125-.363.35T6 17.2zm6-8q.825 0 1.413-.587T14 8t-.587-1.412T12 6t-1.412.588T10 8t.588 1.413T12 10m0 8" />
+              </svg>
+              {{ usuario.rol }}
+            </p>
+          </div>
+
+          <div class="correo">
+            <label>Correo</label>
+            <p>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M7 17q-.825 0-1.412-.587T5 15V5q0-.825.588-1.412T7 3h14q.825 0 1.413.588T23 5v10q0 .825-.587 1.413T21 17zm6.425-5.1L7 7.425V15h14V7.425L14.575 11.9q-.275.2-.575.2t-.575-.2M14 9.85L21 5H7zM3 21q-.825 0-1.412-.587T1 19V7.5q0-.425.288-.712T2 6.5t.713.288T3 7.5V19h15.5q.425 0 .713.288T19.5 20t-.288.713T18.5 21zM21 7.35V5H7v2.35V5h14z" />
+              </svg>
+              {{ usuario.correoElectronico }}
+            </p>
+          </div>
+        </div>
+
+      </div>
+    }
+  </div>
+}
+
+  <!-- Paginación -->
+  @if (!cargando && usuarios().length > 0 && (hasPreviousPage() || hasNextPage())) {
+    <div class="pagination">
+      <button (click)="paginaAnterior()" [disabled]="!hasPreviousPage()">Anterior</button>
+      <span>Página {{ pageNumber() }}</span>
+      <button (click)="siguientePagina()" [disabled]="!hasNextPage()">Siguiente</button>
+    </div>
+  }
+</div>
+
+<!-- Confirm Modal -->
+@if(modalAbierto) {
+  <app-confirm-modal
+  [title]="modalTitle"
+  [message]="modalMessage"
+  (confirm)="modalConfirmCallback && modalConfirmCallback(); cerrarModal()"
+  (cancel)="cerrarModal()">
+</app-confirm-modal>
+}
+
+
+<!-- Modal roles -->
+ @if(modalRolAbierto) {
+  <app-select-modal
+    title="Seleccione el rol del usuario"
+    [options]="rolesDisponibles"
+    [selectedValue]="usuarioSeleccionado?.rol"
+    (confirm)="onConfirmRol($event)"
+    (cancel)="modalRolAbierto = false">
+  </app-select-modal>
+ }

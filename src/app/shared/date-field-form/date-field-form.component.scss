@@ -1,0 +1,67 @@
+@use 'variables' as *;
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2.5rem;
+
+  .date-container {
+    display: flex;            
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;   
+    position: relative;
+  }
+
+  .input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $color-text;
+    pointer-events: none;
+  }
+
+  input[type="date"] {
+    flex: 1; 
+    width: 100%;
+    padding: 12px 20px 12px 55px; 
+    border: 1px solid $color-text-secundary;
+    border-radius: 1rem;
+    font-family: "Urbanist", sans-serif;
+    font-size: 1rem;
+    color: $color-text;
+    background: $color-bg-secundary;
+    outline: none;
+    transition: all 0.3s ease;
+
+
+    &:focus {
+      border-color: $color-primary;
+      box-shadow: 0 0 4px rgba($color-primary, 0.4);
+    }
+
+    &:hover {
+      border-color: $color-primary;
+    }
+
+    // --- Ícono del calendario (nativo) ---
+    &::-webkit-calendar-picker-indicator {
+      position: absolute;
+      right: 12px;
+      cursor: pointer;
+      filter: invert(0.5);
+    }
+  }
+
+  // --- Label flotante ---
+  label {
+    position: absolute;
+    padding: 0 6px;
+    top: -20px;
+    left: 40px;
+    font-size: 0.9rem;
+    color: $color-primary;
+  }
+}

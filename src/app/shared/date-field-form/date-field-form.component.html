@@ -1,0 +1,17 @@
+<div class="input-wrapper">
+  <label>{{ label }}</label>
+
+  <div class="date-container">
+    <svg xmlns="http://www.w3.org/2000/svg" class="input-icon" width="24" height="24"viewBox="0 0 24 24">
+      <path  fill="currentColor" [attr.d]="icon"/>
+    </svg>
+
+    <input
+      type="date"
+      [name]="name"
+      [ngModel]="model"
+      (ngModelChange)="onChange($event)"
+      class="date-input"
+    />
+  </div>
+</div>

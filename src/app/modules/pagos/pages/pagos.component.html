@@ -1,0 +1,334 @@
+<div class="pagos-container">
+  <app-back-header titulo="Pago de servicios"></app-back-header>
+
+    <div class="buscador-container" #buscador>
+       <!-- Buscador -->
+      <div class="input-wrapper">
+
+        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l5.6 5.6q.275.275.275.7t-.275.7t-.7.275t-.7-.275l-5.6-5.6q-.75.6-1.725.95T9.5 16m0-2q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
+        </svg>
+
+        <input
+          type="text"
+          [(ngModel)]="busquedaServicio"
+          (input)="filtrarServicios()"
+          (focus)="mostrarResultados = true"
+          [class.has-content]="busquedaServicio &&busquedaServicio.length > 0"
+        />
+        <label>Buscar servicio...</label>
+      </div>
+
+      @if ( mostrarResultados && serviciosFiltrados.length > 0) {
+          <div class="resultados">
+
+            @for (grupo of serviciosFiltrados; track grupo.categoria) {
+
+              <div class="grupo-servicio">
+                <div class="categoria">
+                    {{ grupo.categoria }}
+                </div>
+
+                <ul>
+                    @for (servicio of grupo.servicios; track servicio.id) {
+                    <li (click)="agregarServicio(servicio)">
+                        <span class="nombre">{{ servicio.id }} - {{ servicio.nombre }}</span>
+                        <span class="precio">${{ servicio.costo }}</span>
+                    </li>
+                    }
+                </ul>
+              </div>
+
+            }
+
+          </div>
+        }
+
+    </div>
+
+  <div class="content-pago">
+
+    <!-- COLUMNA IZQUIERDA -->
+    <section class="col-izquierda">
+
+      <div class="tittle-detalles">
+        <h3>Detalles del pago</h3>
+      </div>
+
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th class="col-servicio">Servicio</th>
+            <th class="col-precio">Precio</th>
+            <th class="col-cantidad">Cantidad</th>
+            <th class="col-total">Total</th>
+            <th class="col-acciones"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (d of detalles; let i = $index; track d.servicioId) {
+              <tr>
+                <td>{{ d.servicioNombre }}</td>
+                <td>${{ d.montoUnidad }}</td>
+                <td>
+                  <div class="cantidad-control">
+                    <button type="button" (click)="decrementarCantidad(d)">−</button>
+                    <span>{{ d.cantidad }}</span>
+                    <button type="button" (click)="incrementarCantidad(d)">+</button>
+                  </div>
+                </td>
+                <td>${{ d.cantidad * d.montoUnidad }}</td>
+                <td>
+                    <button (click)="eliminarDetalle(i)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zm-7 11q.425 0 .713-.288T11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17m4 0q.425 0 .713-.288T15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17M7 6v13z" />
+                      </svg>
+                      Eliminar
+                    </button>
+                </td>
+              </tr>
+          }
+          </tbody>
+      </table>
+    </section>
+
+    <!-- COLUMNA DERECHA -->
+    <section class="col-derecha">
+
+      <!-- DESCUENTO -->
+      <div class="card-pago">
+        <h4>Descuento</h4>
+
+        <div class="check-group">
+          <label class="check-card">
+            <input
+              type="radio"
+              name="descuento"
+              [(ngModel)]="aplicarDescuento"
+              [value]="false"
+              (ngModelChange)="onCambioDescuento($event)"
+            />
+            <span>Sin descuento</span>
+          </label>
+
+          <label class="check-card">
+            <input
+              type="radio"
+              name="descuento"
+              [(ngModel)]="aplicarDescuento"
+              [value]="true"
+              (ngModelChange)="onCambioDescuento($event)"
+            />
+            <span>Aplicar descuento</span>
+          </label>
+        </div>
+
+        @if (aplicarDescuento) {
+          <div class="input-group">
+            <label>Monto del descuento</label>
+            <input 
+              type="number" 
+              [(ngModel)]="valorDescuento" 
+              min="0" 
+              [max]="totalBruto"
+              (input)="onDescuentoInput()"
+            />
+          </div>
+        }
+      </div>
+
+      <!-- MÉTODO DE PAGO -->
+      <div class="card-pago">
+        <h4>Método de pago</h4>
+
+        <div class="check-group">
+          <label class="check-card">
+            <input
+              type="radio"
+              name="metodoPago"
+              [(ngModel)]="metodoPagoId"
+              [value]="1"
+            />
+            <span>Efectivo</span>
+          </label>
+
+          <label class="check-card">
+            <input
+              type="radio"
+              name="metodoPago"
+              [(ngModel)]="metodoPagoId"
+              [value]="2"
+            />
+            <span>Tarjeta</span>
+          </label>
+        </div>
+
+        <!-- EFECTIVO -->
+        @if (metodoPagoId === 1) {
+          <div class="totales">
+            <div class="linea">
+              <span>Total a cobrar:</span>
+              <strong>${{ totalNeto }}</strong>
+            </div>
+
+            <div class="input-group right">
+              <label>Monto recibido:</label>
+              <input 
+                type="number" 
+                [(ngModel)]="montoRecibido" 
+                min="0" 
+                [max]="totalNeto"
+               
+              />
+            </div>
+
+            <div class="linea cambio">
+              <span>Cambio a entregar:</span>
+              <strong>${{ montoRecibido - totalNeto }}</strong>
+            </div>
+          </div>
+        }
+
+        <!-- TARJETA -->
+        @if (metodoPagoId === 2) {
+          <div class="totales">
+            <div class="linea">
+              <span>Total a cobrar:</span>
+              <strong>${{ totalNeto }}</strong>
+            </div>
+          </div>
+        }
+      </div>
+
+      <button class="btn-cobrar" (click)="abrirModalPago()" [disabled]="!pagoValido">
+        Realizar pago
+      </button>
+    </section>
+
+  </div>
+</div>
+
+<!-- Modal de confirmación de pago -->
+@if (mostrarModalPago) {
+  <div class="modal-backdrop">
+    <div class="modal">
+
+      <h2>Confirmar pago</h2>
+
+      <div class="tabla-scroll">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th>Servicio</th>
+              <th>Cant.</th>
+              <th>Precio</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (d of detalles; track d.servicioId) {
+              <tr>
+                <td>{{ d.servicioNombre }}</td>
+                <td>{{ d.cantidad }}</td>
+                <td>${{ d.montoUnidad }}</td>
+                <td>${{ d.cantidad * d.montoUnidad }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="resumen">
+        <div class="resumen-card">
+
+          <div class="fila">
+            <span>Método de pago</span>
+            <strong>{{ metodoPagoId === 1 ? 'Efectivo' : 'Tarjeta' }}</strong>
+          </div>
+
+          <div class="fila">
+            <span>Total bruto</span>
+            <strong>${{ totalBruto }}</strong>
+          </div>
+
+          <div class="fila descuento">
+            <span>Descuento</span>
+            <strong>- ${{ valorDescuento }}</strong>
+          </div>
+
+          <div class="separador"></div>
+
+          <div class="fila total">
+            <span>Total a pagar</span>
+            <strong>${{ totalNeto }}</strong>
+          </div>
+
+          @if (metodoPagoId === 1) {
+            <div class="separador"></div>
+
+            <div class="fila">
+              <span>Monto recibido</span>
+              <strong>${{ montoRecibido }}</strong>
+            </div>
+
+            <div class="fila cambio">
+              <span>Cambio</span>
+              <strong>${{ montoRecibido - totalNeto }}</strong>
+            </div>
+          }
+
+        </div>
+      </div>
+
+      <div class="acciones">
+        <button class="btn-secundary" (click)="cerrarModalPago()">
+          Cancelar
+        </button>
+
+        <button class="btn-primary" (click)="confirmarPago()">
+          Confirmar pago
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
+
+<!-- Modal de éxito -->
+@if (mostrarModalExito) {
+  <div class="modal-backdrop">
+    <div class="modal exito">
+
+      <div class="icono-check">✓</div>
+      <h2>Pago realizado</h2>
+      <p>El pago se realizó correctamente</p>
+
+      <button class="btn-primary" (click)="abrirModalTicket()">
+        Continuar
+      </button>
+
+    </div>
+  </div>
+}
+
+@if (mostrarModalTicket) {
+  <div class="modal-backdrop">
+    <div class="modal ticket">
+
+      <h2>Imprimir ticket</h2>
+      <p>¿Desea imprimir el ticket del pago?</p>
+
+      <div class="acciones">
+        <button class="btn-secundary" (click)="cerrarTodo()">
+          No
+        </button>
+
+        <button class="btn-primary" (click)="imprimirTicket()">
+          Sí, imprimir
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

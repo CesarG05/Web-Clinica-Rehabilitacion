@@ -1,0 +1,173 @@
+<div class="tratamiento-container">
+
+  <!-- Header -->
+  <app-back-header titulo="Detalles del tratamiento"></app-back-header>
+
+  <!-- Loader -->
+  @if (cargando) {
+    <div class="loader">
+      <img src="assets/loaders/circles.svg" />
+      <p>Cargando detalles del tratamiento...</p>
+    </div>
+  }
+
+  <!-- CONTENIDO -->
+  @if (!cargando && tratamientoDetalle) {
+
+    <div class="content-grid">
+
+      <!-- COLUMNA IZQUIERDA -->
+      <section class="col-izquierda">
+
+         <div class="card card-paciente">
+          <div class="card-tittle" style="margin-bottom: 2rem;">
+            <h3>Paciente</h3>
+          </div>
+
+          <p>No. paciente: <strong> {{ tratamientoDetalle.paciente.id }} </strong></p>
+          <p>Nombre: 
+            <strong>
+              {{ tratamientoDetalle.paciente.primerNombre }}
+              {{ tratamientoDetalle.paciente.segundoNombre }}
+              {{ tratamientoDetalle.paciente.primerApellido }}
+              {{ tratamientoDetalle.paciente.segundoApellido }}
+            </strong>
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-tittle">
+            <h3>Información del tratamiento</h3>
+          </div>
+
+          <p style="margin-top: 2rem;"><strong>Padecimiento:</strong> {{ tratamientoDetalle.padecimiento }}</p>
+
+          <p><strong>Tratamiento:</strong> {{ tratamientoDetalle.tratamiento }}</p>
+
+          <p>
+            <strong>Fecha inicio:</strong>
+            {{ tratamientoDetalle.fechaInicioTratamiento | date:'dd/MM/yyyy' }}
+          </p>
+
+          @if (tratamientoDetalle.fechaFinTratamiento) {
+            <p>
+              <strong>Fecha fin:</strong>
+              {{ tratamientoDetalle.fechaFinTratamiento | date:'dd/MM/yyyy' }}
+            </p>
+          }
+
+          <p><strong>Observaciones:</strong></p>
+          <p class="observaciones" [class.sin-boton]="tratamientoDetalle.fechaFinTratamiento">
+            {{ tratamientoDetalle.observaciones || 'Sin observaciones' }}
+          </p>
+
+          @if (!tratamientoDetalle.fechaFinTratamiento) {
+            <button class="btn-finalizar" (click)="confirmarFinalizarTratamiento()">
+              Finalizar tratamiento
+            </button>
+          }
+        </div>
+
+      </section>
+
+      <!-- COLUMNA DERECHA -->
+      <section class="col-derecha">
+
+        <div class="section-actions">
+          <button class="btn-text"  (click)="fileInput.click()" [disabled]="tratamientoDetalle.fechaFinTratamiento !== null">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20">
+                    <path fill="currentColor" d="M12 21q-.425 0-.712-.288T11 20v-7H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7V4q0-.425.288-.712T12 3t.713.288T13 4v7h7q.425 0 .713.288T21 12t-.288.713T20 13h-7v7q0 .425-.288.713T12 21" />
+                </svg>
+                Subir documento
+          </button>
+
+          <input
+            #fileInput
+            type="file"
+            hidden
+            accept=".pdf,.jpg,.jpeg,.png"
+            (change)="onFileSelected($event)"
+          />
+        </div>
+
+        <!-- DOCUMENTOS -->
+        <div class="card">
+          <div class="card-tittle">
+            <h3>Documentos anexados</h3>
+          </div>
+
+          @if (tratamientoDetalle.documentos.length === 0) {
+            <p class="empty">No hay documentos anexados</p>
+          } @else {
+          <div class="documentos-grid">
+            @for (doc of tratamientoDetalle.documentos; track doc.id) {
+              <app-documento-item
+                [documento]="doc"
+                (verDocumento)="verDocumento($event)"
+                (descargarDocumento)="descargarDocumento($event)"
+                (eliminar)="eliminarDocumento($event)">
+              </app-documento-item>
+            }
+          </div>
+          }
+        </div>
+      
+        <div class="section-actions">
+          <button class="btn-text"  
+          [routerLink]="['/sesiones/nueva-sesion']"
+          [queryParams]="{ pacienteId: tratamientoDetalle.paciente.id, tratamientoId: tratamientoDetalle.tratamientoId}" 
+          [disabled]="tratamientoDetalle.fechaFinTratamiento !== null">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20">
+                    <path fill="currentColor" d="M12 21q-.425 0-.712-.288T11 20v-7H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7V4q0-.425.288-.712T12 3t.713.288T13 4v7h7q.425 0 .713.288T21 12t-.288.713T20 13h-7v7q0 .425-.288.713T12 21" />
+                </svg>
+                Agregar sesión
+          </button>
+        </div>
+
+        <!-- SESIONES -->
+        <div class="card">
+          <div class="card-tittle">
+            <h3>Sesiones del tratamiento</h3>
+          </div>
+
+          @if (tratamientoDetalle.sesiones.length === 0) {
+            <p class="empty">No hay sesiones asociadas</p>
+          }
+
+          @for (s of tratamientoDetalle.sesiones; track s.id) {
+            <app-session-item
+              [sesion]="s"
+              (verNotas)="verNotasSesion($event)"
+              (cambiarEstado)="cambiarEstadoSesion($event)"
+              (eliminar)="eliminarSesion($event)">
+            </app-session-item>
+          }
+        </div>
+
+      </section>
+
+    </div>
+  }
+</div>
+
+
+<!-- Confirm Modal -->
+@if(modalAbierto) {
+<app-confirm-modal
+  [title]="modalTitle"
+  [message]="modalMessage"
+  (confirm)="modalConfirmCallback && modalConfirmCallback(); cerrarModal()"
+  (cancel)="cerrarModal()">
+</app-confirm-modal>
+}
+
+<!-- Modal estados -->
+@if(modalEstadoAbierto) {
+<app-select-modal
+  title="Seleccione el estado de la sesión"
+  [options]="estadosSesion"
+  [selectedValue]="sesionSeleccionado?.estado?.estadoId"
+  (confirm)="onConfirmRol($event)"
+  (cancel)="modalEstadoAbierto = false">
+</app-select-modal>
+}

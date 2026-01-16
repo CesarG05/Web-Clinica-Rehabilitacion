@@ -1,0 +1,172 @@
+<div class="usuarios-container">
+
+  <!-- Encabezado  -->
+  <app-back-header titulo="Lista de pacientes"></app-back-header>
+
+  <div class="top-bar">
+    <app-input-field
+      type="text"
+      label="Buscar paciente"
+      [iconPath]="'M10 2a8 8 0 1 0 5.29 14.29l4.15 4.15l1.41-1.41l-4.15-4.15A8 8 0 0 0 10 2m0 2a6 6 0 1 1 0 12A6 6 0 0 1 10 4Z'"
+      [(model)]="searchText"
+      (search)="buscar($event)">
+    </app-input-field>
+
+    <button class="btn-agregar" routerLink="nuevo-paciente">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 21q-.425 0-.712-.288T11 20v-7H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7V4q0-.425.288-.712T12 3t.713.288T13 4v7h7q.425 0 .713.288T21 12t-.288.713T20 13h-7v7q0 .425-.288.713T12 21" />
+      </svg>
+      <span>Nuevo paciente</span>
+    </button>
+  </div>
+
+  <div class="filters">
+    <div class="buttons">
+      <button [class.active]="activoFilter === true" (click)="cambiarFiltro(true)">Activos</button>
+      <button [class.active]="activoFilter === false" (click)="cambiarFiltro(false)">Inactivos</button>
+      <button [class.active]="activoFilter === null" (click)="cambiarFiltro(null)">Todos</button>
+    </div>
+
+    <div class="orden">
+      <label for="orden">Ordenar:</label>
+      <select id="orden" [(ngModel)]="orden" (change)="cambiarOrden(orden)">
+        <option value="recientes">Recientes</option>
+        <option value="a-z">A - Z</option>
+        <option value="z-a">Z - A</option>
+      </select>
+    </div>
+
+    <p class="total">Total : {{ total() }}</p>
+  </div>
+
+  @if (cargando) {
+    <div class="loader">
+      <img src="assets/loaders/circles.svg" alt="Cargando..." />
+      <p>Cargando pacientes...</p>
+    </div>
+  }
+
+  @if (!cargando && pacientes().length === 0) {
+    <div class="no-results">
+      <p>No hay pacientes encontrados</p>
+    </div>
+  }
+
+  @if (!cargando && pacientes().length > 0) {
+    <div class="usuarios-grid">
+      @for (paciente of pacientes(); track paciente.id) {
+        <div class="usuario-card" [class.habilitado]="paciente.activo" [class.bloqueado]="!paciente.activo">
+
+          <div class="card-header">
+            <div class="avatar-container">
+              <img
+                [src]="paciente.sexo === 'Masculino' ? 'assets/icons/avatar-hombre.png' : 'assets/icons/avatar-mujer.png'"
+                alt="Avatar"
+                class="avatar-img"
+              />
+
+              <span
+                class="status-dot"
+                [class.activo]="paciente.activo"
+                [class.bloqueado]="!paciente.activo"
+              ></span>
+
+              <span
+                class="status-text-inline"
+                [class.activo]="paciente.activo"
+                [class.bloqueado]="!paciente.activo"
+              >
+                {{ paciente.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </div>
+
+            <div class="info">
+              <p class="paciente-id">No. Paciente: {{ paciente.id }}</p>
+
+              <h3>
+                {{ paciente.primerApellido }} {{ paciente.segundoApellido }}
+                {{ paciente.primerNombre }}
+              </h3>
+            </div>
+
+            <div class="menu">
+              <button class="menu-btn" (click)="toggleMenu(paciente.id, $event)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="3.75"
+                    d="M12 12h.01v.01H12zm0-7h.01v.01H12zm0 14h.01v.01H12z" />
+                </svg>
+              </button>
+
+              @if (menuAbiertoId() === paciente.id) {
+                <div class="menu-dropdown">
+                  <button (click)="verFichaPaciente(paciente)">Ver ficha del paciente</button>
+                  <!-- <button routerLink="historial-clinico/{{ paciente.id }}">Ver historial clínico</button> -->
+                  <!-- <button [routerLink]="[paciente.id, 'historial-clinico']"> Ver historial clínico</button> -->
+                  <button [routerLink]="['/pacientes', paciente.id, 'historial-clinico']"> Ver historial clínico </button>
+                  <!-- <button routerLink="editar/{{ paciente.id }}">Editar paciente</button> -->
+                  <button [routerLink]="['editar', paciente.id]">Editar paciente</button>
+                  <button (click)="cambiarEstadoPaciente(paciente)">
+                    {{ paciente.activo ? 'Inactivar paciente' : 'Activar paciente' }}
+                  </button>
+                  <button class="delete" (click)="eliminarPaciente(paciente)">Eliminar paciente</button>
+                </div>
+              }
+            </div>
+          </div>
+
+          <hr />
+
+          <div class="card-footer">
+            <div>
+              <label>Sexo</label>
+              <p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 26 26">
+                  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11a4 4 0 1 0 8 0a4 4 0 1 0-8 0m12-8l-5 5m1-5h4v4m-8 9v6m-3-3h6" />
+                </svg>
+                {{ paciente.sexo }}
+              </p>
+            </div>
+
+            <div>
+              <label>Fecha de nacimiento</label>
+              <p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M5 22q-.825 0-1.412-.587T3 20V6q0-.825.588-1.412T5 4h1V3q0-.425.288-.712T7 2t.713.288T8 3v1h8V3q0-.425.288-.712T17 2t.713.288T18 3v1h1q.825 0 1.413.588T21 6v14q0 .825-.587 1.413T19 22zm0-2h14V10H5zM5 8h14V6H5zm0 0V6zm7 6q-.425 0-.712-.288T11 13t.288-.712T12 12t.713.288T13 13t-.288.713T12 14m-4 0q-.425 0-.712-.288T7 13t.288-.712T8 12t.713.288T9 13t-.288.713T8 14m8 0q-.425 0-.712-.288T15 13t.288-.712T16 12t.713.288T17 13t-.288.713T16 14m-4 4q-.425 0-.712-.288T11 17t.288-.712T12 16t.713.288T13 17t-.288.713T12 18m-4 0q-.425 0-.712-.288T7 17t.288-.712T8 16t.713.288T9 17t-.288.713T8 18m8 0q-.425 0-.712-.288T15 17t.288-.712T16 16t.713.288T17 17t-.288.713T16 18" />
+                </svg>
+                {{ paciente.fechaNacimiento | date:'dd/MM/yyyy' }}
+              </p>
+            </div>
+
+            <!-- <div>
+              <label>Edad</label>
+              <p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M12 12q-1.65 0-2.825-1.175T8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12m-8 6v-.8q0-.85.438-1.562T5.6 14.55q1.55-.775 3.15-1.162T12 13t3.25.388t3.15 1.162q.725.375 1.163 1.088T20 17.2v.8q0 .825-.587 1.413T18 20H6q-.825 0-1.412-.587T4 18m2 0h12v-.8q0-.275-.137-.5t-.363-.35q-1.35-.675-2.725-1.012T12 15t-2.775.338T6.5 16.35q-.225.125-.363.35T6 17.2zm6-8q.825 0 1.413-.587T14 8t-.587-1.412T12 6t-1.412.588T10 8t.588 1.413T12 10m0 8" />
+                </svg>
+                {{ calcularEdad(paciente.fechaNacimiento) }} años
+              </p>
+            </div> -->
+          </div>
+
+        </div>
+      }
+    </div>
+  }
+
+  @if (!cargando && pacientes().length > 0 && (hasPreviousPage() || hasNextPage())) {
+    <div class="pagination">
+      <button (click)="paginaAnterior()" [disabled]="!hasPreviousPage()">Anterior</button>
+      <span>Página {{ pageNumber() }}</span>
+      <button (click)="siguientePagina()" [disabled]="!hasNextPage()">Siguiente</button>
+    </div>
+  }
+</div>
+
+@if (modalAbierto) {
+  <app-confirm-modal
+    [title]="modalTitle"
+    [message]="modalMessage"
+    (confirm)="modalConfirmCallback && modalConfirmCallback(); cerrarModal()"
+    (cancel)="cerrarModal()">
+  </app-confirm-modal>
+}

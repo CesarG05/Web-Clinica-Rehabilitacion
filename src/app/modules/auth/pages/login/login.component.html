@@ -1,0 +1,67 @@
+<div class="login-page">
+
+  <!-- Logo arriba derecha -->
+  <div class="logo-container">
+    <img src="favicon.svg" alt="Logo" />
+    <span class="logo-text">HealSof+</span>
+  </div>
+
+  <!-- Formulario centrado -->
+  <div class="login-container">
+    <h2>Inicio de Sesión</h2>
+    <p class="subtext">LIena los campos e inicia sesión para continuar</p>
+    <form #loginForm="ngForm" (ngSubmit)="onLogin()" novalidate>
+      <!-- Usuario o Email -->
+      <div class="input-group">
+        <div class="input-wrapper">
+          <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M7 17q-.825 0-1.412-.587T5 15V5q0-.825.588-1.412T7 3h14q.825 0 1.413.588T23 5v10q0 .825-.587 1.413T21 17zm7-4.7L7 7.425V15h14V7.425zm0-2.45L21 5H7zM3 21q-.825 0-1.412-.587T1 19V6.5h2V19h16.5v2zM21 7.35V5H7v2.35V5h14z"/>
+          </svg>
+
+          <input type="text" [(ngModel)]="usuario" name="usuario" required #usuarioCtrl="ngModel" />
+          <label for="usuario">Usuario o Correo electrónico</label>
+        </div>
+
+        @if(usuarioCtrl.invalid && usuarioCtrl.touched){
+          <p class="error">El usuario es obligatorio.</p>
+        }
+      </div>
+
+      <!-- Contraseña -->
+      <div class="input-group">
+        <div class="input-wrapper">
+           <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+              <path fill="808D9E" d="M6 22q-.825 0-1.412-.587T4 20V10q0-.825.588-1.412T6 8h1V6q0-2.075 1.463-3.537T12 1t3.538 1.463T17 6v2h1q.825 0 1.413.588T20 10v10q0 .825-.587 1.413T18 22zm0-2h12V10H6zm6-3q.825 0 1.413-.587T14 15t-.587-1.412T12 13t-1.412.588T10 15t.588 1.413T12 17M9 8h6V6q0-1.25-.875-2.125T12 3t-2.125.875T9 6zM6 20V10z" />
+           </svg>
+          <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" required #passwordCtrl="ngModel">
+          <label for="password">Contraseña</label>
+          <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"  (click)="togglePassword()">
+            @if (showPassword) {
+              <path fill="currentColor" d="M12 6a9.77 9.77 0 0 1 8.82 5.5C19.17 14.87 15.79 17 12 17s-7.17-2.13-8.82-5.5A9.77 9.77 0 0 1 12 6m0-2C7 4 2.73 7.11 1 11.5C2.73 15.89 7 19 12 19s9.27-3.11 11-7.5C21.27 7.11 17 4 12 4m0 5a2.5 2.5 0 0 1 0 5a2.5 2.5 0 0 1 0-5m0-2c-2.48 0-4.5 2.02-4.5 4.5S9.52 16 12 16s4.5-2.02 4.5-4.5S14.48 7 12 7"/>
+            } @else {
+              <path fill="currentColor" d="M12 6a9.77 9.77 0 0 1 8.82 5.5a9.65 9.65 0 0 1-2.41 3.12l1.41 1.41c1.39-1.23 2.49-2.77 3.18-4.53C21.27 7.11 17 4 12 4c-1.27 0-2.49.2-3.64.57l1.65 1.65C10.66 6.09 11.32 6 12 6m-1.07 1.14L13 9.21c.57.25 1.03.71 1.28 1.28l2.07 2.07c.08-.34.14-.7.14-1.07C16.5 9.01 14.48 7 12 7c-.37 0-.72.05-1.07.14M2.01 3.87l2.68 2.68A11.74 11.74 0 0 0 1 11.5C2.73 15.89 7 19 12 19c1.52 0 2.98-.29 4.32-.82l3.42 3.42l1.41-1.41L3.42 2.45zm7.5 7.5l2.61 2.61c-.04.01-.08.02-.12.02a2.5 2.5 0 0 1-2.5-2.5c0-.05.01-.08.01-.13m-3.4-3.4l1.75 1.75a4.6 4.6 0 0 0-.36 1.78a4.507 4.507 0 0 0 6.27 4.14l.98.98c-.88.24-1.8.38-2.75.38a9.77 9.77 0 0 1-8.82-5.5c.7-1.43 1.72-2.61 2.93-3.53"/>
+            }   
+          </svg>
+        </div>
+         
+        @if(passwordCtrl.invalid && passwordCtrl.touched){
+           <p class="error">La contraseña es obligatoria.</p>
+         }
+      </div>
+
+      <!-- Olvidaste contraseña -->
+      <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+
+      <!-- Botón -->
+      <button type="submit" [disabled]="loginForm.invalid">
+        @if (!loading()) {
+          <span>Iniciar</span>
+        } @else {
+          <span class="loader"></span>
+        }
+      </button>
+    </form>
+  </div>
+</div>
+
+

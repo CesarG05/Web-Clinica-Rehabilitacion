@@ -1,0 +1,100 @@
+<div class="servicio-create-container">
+ 
+  <app-back-header titulo="Registrar nuevo servicio" variant="spaced"></app-back-header>
+
+  <form class="form-grid" (ngSubmit)="guardarServicio()">
+    <div class="form-left">
+      <h3> </h3>
+
+      <app-input-field-form 
+        label="Nombre del servicio"
+        [(model)]="servicio.nombre"
+        [required]="true"
+        [submitted]="submitted"
+        [errorMessage]="'El nombre es obligatorio'"
+        iconPath="M10.5 13.5v2q0 .625.438 1.063T12 17t1.063-.437t.437-1.063v-2h2q.625 0 1.063-.437T17 12t-.437-1.062T15.5 10.5h-2v-2q0-.625-.437-1.062T12 7t-1.062.438T10.5 8.5v2h-2q-.625 0-1.062.438T7 12t.438 1.063T8.5 13.5zM5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21z"
+      ></app-input-field-form>
+
+      <app-input-field-form
+        label="Descripción"
+        type="textarea"
+        [(model)]="servicio.descripcion"
+        [required]="true"
+        [submitted]="submitted"
+        [errorMessage]="'La descripción es obligatoria'"
+        iconPath="M9 18h6q.425 0 .713-.288T16 17t-.288-.712T15 16H9q-.425 0-.712.288T8 17t.288.713T9 18m0-4h6q.425 0 .713-.288T16 13t-.288-.712T15 12H9q-.425 0-.712.288T8 13t.288.713T9 14m-3 8q-.825 0-1.412-.587T4 20V4q0-.825.588-1.412T6 2h7.175q.4 0 .763.15t.637.425l4.85 4.85q.275.275.425.638t.15.762V20q0 .825-.587 1.413T18 22zm7-14q0 .425.288.713T14 9h4l-5-5z"
+      ></app-input-field-form>
+
+      <app-input-field-form
+        label="Costo"
+        [(model)]="servicio.costo"
+        [required]="true"
+        [submitted]="submitted"
+        [errorMessage]="'El costo es obligatorio'"
+        iconPath="M11.1 19h1.75v-1.25q1.25-.225 2.15-.975t.9-2.225q0-1.05-.6-1.925T12.9 11.1q-1.5-.5-2.075-.875T10.25 9.2t.463-1.025T12.05 7.8q.8 0 1.25.387t.65.963l1.6-.65q-.275-.875-1.012-1.525T12.9 6.25V5h-1.75v1.25q-1.25.275-1.95 1.1T8.5 9.2q0 1.175.688 1.9t2.162 1.25q1.575.575 2.188 1.025t.612 1.175q0 .825-.587 1.213t-1.413.387t-1.463-.512T9.75 14.1l-1.65.65q.35 1.2 1.088 1.938T11.1 17.7zm.9 3q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"
+     ></app-input-field-form>
+
+    </div>
+
+    <div class="form-right">
+      <h3> </h3>
+
+      <app-input-field-form 
+        label="Duración estimada (HH:mm:ss)"
+        [(model)]="servicio.duracionEstimada"
+        [required]="true"
+        [submitted]="submitted"
+        [errorMessage]="'La duración es obligatorio'"
+        iconPath="M13 12.175V9q0-.425-.288-.712T12 8t-.712.288T11 9v3.575q0 .2.075.388t.225.337l2.525 2.525q.3.3.713.3t.712-.3q.275-.3.275-.712t-.275-.688zM12 6q.425 0 .713-.288T13 5t-.288-.712T12 4t-.712.288T11 5t.288.713T12 6m6 6q0 .425.288.713T19 13t.713-.288T20 12t-.288-.712T19 11t-.712.288T18 12m-6 6q-.425 0-.712.288T11 19t.288.713T12 20t.713-.288T13 19t-.288-.712T12 18m-6-6q0-.425-.288-.712T5 11t-.712.288T4 12t.288.713T5 13t.713-.288T6 12m6 10q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"
+      ></app-input-field-form>
+
+      @if (cargandoCategorias) {
+        <p>Cargando categorías...</p>
+        } @else {
+        <app-select-field-form
+            label="Categoría"
+            name="categoria"
+            [options]="categorias"
+            [(model)]="servicio.categoriaId"
+            icon='M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h16q.425 0 .713.288T21 17t-.288.713T20 18zm0-5q-.425 0-.712-.288T3 12t.288-.712T4 11h16q.425 0 .713.288T21 12t-.288.713T20 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h16q.425 0 .713.288T21 7t-.288.713T20 8z'>
+        </app-select-field-form>
+        }
+
+        <button class="btn-text" (click)="abrirModalCategoria()" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 21q-.425 0-.712-.288T11 20v-7H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7V4q0-.425.288-.712T12 3t.713.288T13 4v7h7q.425 0 .713.288T21 12t-.288.713T20 13h-7v7q0 .425-.288.713T12 21" />
+            </svg>
+             Agregar categoría
+        </button>
+
+       <div class="switch-wrapper">
+        <label>Disponibilidad</label>
+        <label class="switch">
+          <input type="checkbox" [(ngModel)]="servicio.disponible" name="disponible" />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="form-footer">
+        <button type="submit" class="btn-save" [disabled]="cargando">
+            @if (!cargando) {
+              Guardar
+            } @else {
+              <span class="spinner"></span> Guardando...
+            }
+        </button>
+    </div>
+
+  </form>
+</div>
+
+
+<!-- Modal -->
+@if (mostrarModalCategoria) {
+  <app-add-category-modal 
+      (save)="guardarCategoria($event)"
+      (cancel)="cerrarModalCategoria()">
+  </app-add-category-modal>
+}

@@ -1,0 +1,51 @@
+<!-- <div class="select-wrapper">
+  <label>{{ label }}</label>
+
+  <div class="select-container">
+     <svg xmlns="http://www.w3.org/2000/svg" class="icono-select" viewBox="0 0 24 24">
+      <path [attr.d]="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+    </svg>
+
+    <select
+      [name]="name"
+      [ngModel]="model"
+      (ngModelChange)="onChange($event)"
+    >
+    
+    @if(!model){
+      <option value="" disabled selected>
+        Seleccione una opción
+      </option>
+    }
+
+    @for (opt of options; track opt.id) {
+      <option [value]="opt.id">{{ opt.nombre }}</option>
+    }
+    </select>
+  </div>
+</div> -->
+
+
+<div class="select-wrapper">
+  <label>{{ label }}</label>
+
+  <div class="select-container">
+    <svg xmlns="http://www.w3.org/2000/svg" class="icono-select" viewBox="0 0 24 24">
+      <path [attr.d]="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+    </svg>
+
+    <select
+      [name]="name"
+      [(ngModel)]="model"
+      (ngModelChange)="onChange($event)"
+    >
+
+      <!-- Placeholder -->
+      <option [ngValue]="null" disabled>Seleccione una opción</option>
+
+      @for (opt of options; track opt.id) {
+        <option [ngValue]="opt.id">{{ opt.nombre }}</option>
+      }
+    </select>
+  </div>
+</div>

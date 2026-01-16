@@ -1,0 +1,236 @@
+@use 'variables' as *;
+@use 'typography' as *;
+@use "sass:color";
+
+.info-clinica-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 6rem 5rem 4rem 5rem;
+  background: $color-bg;
+  
+  @media (max-width: 768px) {
+    padding: 5rem 1.5rem 2rem 1.5rem;
+  }
+}
+
+.info-clinica-content {
+  max-width: 720px; 
+  margin: 0 auto; 
+  width: 100%;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logo-card {
+  display: flex;
+  flex-direction: column;  
+  align-items: center;     
+  justify-content: center;
+  gap: 16px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 32px;
+  padding-top: 0;
+  background: transparent;
+
+  img {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    border-radius: 50%;
+    border: 2px solid $color-primary;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 1.2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+  }
+  
+  .editar-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #009688;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-radius: 12px;
+    background: #e0f2f1;
+    transition: all 0.3s ease;
+    
+    svg {
+      transition: transform 0.3s ease;
+    }
+    
+    &:hover {
+      background: #b2dfdb;
+      color: #00796b;
+      
+      svg {
+        transform: rotate(10deg);
+      }
+    }
+    
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+.card {
+  background-color: $color-bg-secundary;
+  border-radius: 20px;
+  padding: 28px 32px;
+  transition: box-shadow 0.3s ease;
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 140px 1fr auto; 
+  align-items: center;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: $color-bg;
+    margin: 0 -16px;
+    padding: 18px 16px;
+    border-radius: 12px;
+  }
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  .label {
+    font-weight: 600;
+    color: $color-primary;
+    font-size: 1.1rem;
+    letter-spacing: 0.3px;
+  }
+  
+  > span:not(.label) {
+    color: $color-text;
+    font-size: 1rem;
+  }
+  
+  input {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 2px solid $color-text-secundary;
+    font-size: 1rem;
+    background: #fafbfc;
+    transition: all 0.3s ease;
+    outline: none;
+    
+    &:focus {
+      border-color: #009688;
+      background: white;
+    }
+  }
+  
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    padding: 8px;
+    transition: all 0.2s ease;
+  }
+  
+  .edit {
+    color: #7e8c9a;
+    
+    &:hover {
+      color: #009688;
+      background: #e0f2f1;
+      transform: scale(1.1);
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+.acciones-edicion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  button {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+  
+  .ok {
+    background: linear-gradient(135deg, #00bfa5 0%, #009688 100%);
+    color: white;
+    
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 150, 136, 0.3);
+      transform: translateY(-2px);
+    }
+  }
+  
+  .cancel {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+    
+    &:hover {
+      box-shadow: 0 4px 12px rgba(238, 90, 82, 0.3);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Animación para cuando aparecen los campos de edición
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fila input,
+.acciones-edicion {
+  animation: slideIn 0.3s ease;
+}

@@ -1,0 +1,258 @@
+@use "variables" as *;
+@use "typography" as *;
+@use "sass:color";
+
+.login-page {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: $color-bg;
+
+  // Imagen esquina superior derecha
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 600px;
+    height: 600px;
+    background: url("../../../../../assets/img/Gradient.png") no-repeat;
+    background-size: contain;
+    pointer-events: none;
+  }
+
+  // Imagen esquina inferior izquierda
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 600px;
+    height: 600px;
+    background: url("../../../../../assets/img/Gradient.png") no-repeat;
+    background-size: contain;
+    pointer-events: none;
+    transform: rotate(180deg);
+  }
+
+  .logo-container {
+    position: absolute;
+    z-index: 1;
+    top: 20px;
+    left: 30px;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 100px;
+      height: 100px;
+      margin-right: 10px;
+    }
+
+    .logo-text {
+      font-family: "Urbanist";
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: $color-text;
+    }
+  }
+
+  .login-container {
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 30px;
+    background: none;
+
+    h2 {
+      font-family: "Urbanist";
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: $color-text;
+    }
+
+    .subtext {
+      font-family: "Urbanist";
+      font-size: 1rem;
+      margin-bottom: 5rem;
+      color: $color-text;
+      opacity: 0.6;
+      text-align: center;
+    }
+
+    form {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 2rem;
+
+        .input-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+
+          input {
+            width: 100%;
+            padding: 12px 45px;
+            border: none;
+            border-bottom: 1px solid $color-text;
+            font-family: "Urbanist", sans-serif;
+            font-size: 1rem;
+            color: $color-text;
+            background: none;
+            outline: none;
+            transition: all 0.3s ease;
+
+            &:focus {
+              border: 1px solid $color-primary;
+              border-radius: 6px;
+              box-shadow: 0 0 4px rgba($color-primary, 0.4);
+            }
+
+            &:hover {
+              border-bottom: 1px solid $color-primary;
+            }
+          }
+
+          .input-icon,
+          .eye-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.7;
+            color: $color-text;
+          }
+
+          .input-icon {
+            left: 10px;
+          }
+
+          .eye-icon {
+            right: 10px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+
+          label {
+            position: absolute;
+            top: 50%;
+            left: 45px;
+            transform: translateY(-50%);
+            color: $color-text;
+            opacity: 0.7;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            padding: 0 6px;
+          }
+
+          input:focus + label,
+          input:valid + label {
+            top: -8px;
+            left: 40px;
+            font-size: 0.9rem;
+            color: $color-primary;
+            opacity: 1;
+          }
+        }
+
+        .error {
+          margin-top: 6px;
+          color: $color-error;
+          font-size: 0.8rem;
+        }
+
+        input.ng-invalid.ng-touched {
+          border-color: $color-error;
+          border-radius: 6px;
+          box-shadow: 0 0 4px rgba($color-error, 0.4);
+        }
+      }
+
+      .forgot-password {
+        font-size: 1rem;
+        font-weight: 600;
+        color: $color-primary;
+        text-decoration: none;
+        margin-bottom: 20px;
+        align-self: flex-end;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      button {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12px 20px;
+        margin-top: 3rem;
+        border: none;
+        border-radius: 1rem;
+        background-color: $color-primary;
+        color: $color-bg-secundary;
+        font-family: 'Urbanist', sans-serif;
+        font-weight: 800;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .loader {
+          width: 20px;
+          height: 20px;
+          border: 3px solid rgba($color-bg-secundary, 0.3);
+          border-top: 3px solid $color-bg-secundary;
+          border-radius: 50%;
+          animation: spin 0.8s linear infinite;
+        }
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+    }
+
+    .error-submit {
+      margin-top: 1rem;
+      color: $color-error;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      background-color: rgba($color-error, 0.1);
+      padding: 8px 12px;
+      border-radius: 6px;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    // Animación simple
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+  }
+}

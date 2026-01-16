@@ -1,0 +1,306 @@
+@use 'variables' as *;
+@use 'typography' as *;
+@use "sass:color";
+
+.notas-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 6rem 5rem 2rem 5rem;
+  background-color: $color-bg;
+}
+
+.notas-content {
+  max-width: none;    
+  margin: 0;       
+  padding: 1.5rem;
+}
+
+.centered-content {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+
+/* Top bar con botón */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 2rem;
+
+  app-input-field {
+    flex: 1;
+  }
+
+  .btn-agregar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; 
+    background-color: $color-primary;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 1rem;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+
+    svg {
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      background-color: $color-primary-hover;
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+.session-info {
+  display: flex;
+  gap: 3rem;
+  background-color: transparent;
+  padding: 1rem 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 1rem;
+  color: $color-text-secundary;
+  margin-bottom: 0.5rem;
+}
+
+.value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $color-text;
+}
+
+/* Loader */
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6rem;
+  color: $color-text;
+
+  img {
+    width: 70px;
+    margin-bottom: 2rem;
+  }
+
+  p{
+     font-size: 1.1rem;
+     color: $color-text-secundary;
+  }
+}
+
+/* Sin resultados */
+.no-results {
+  text-align: center;
+  color: $color-text-secundary;
+  margin-top: 4rem;
+  font-size: 1.1rem;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 240px);
+  gap: 1.5rem;
+
+  justify-content: start;
+  align-content: start;
+
+  max-width: 1200px;   
+  margin-left: 0;     
+}
+
+/* Tarjeta tipo hoja */
+.note-card {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  background-color: $color-bg-secundary;
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow:  0 0 6px rgba(0,0,0,.15);
+  transition: transform .2s ease, box-shadow .2s ease;
+
+  &:hover {
+    transform: rotate(-1deg) translateY(-4px);
+    box-shadow: 0 0px 8px rgba(0,0,0,.2);
+  }
+}
+
+/* Header */
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: $color-text;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+
+  strong {
+    color: $color-text;
+    font-weight: 600;
+  }
+
+  span {
+    color: $color-text-secundary;
+  }
+}
+
+/* Texto */
+.note-text {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.5;
+  overflow-y: auto;
+  max-height: 150px;
+  white-space: pre-line;
+}
+
+/* Botón eliminar */
+.delete-btn {
+  position: absolute;
+  top: .4rem;
+  right: .4rem;
+  background: none;
+  border: none;
+  color: $color-error;
+  cursor: pointer;
+  transition: opacity .2s, transform .2s;
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+// Modal nueva nota
+
+/* Backdrop */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+/* Card */
+.modal-content {
+  background: $color-bg-secundary;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 450px;
+  padding: 2rem;
+  box-shadow: 0 0 4px rgba($color-primary, 0.4);
+  animation: fadeInUp 0.25s ease-in-out;
+}
+
+/* Título */
+.modal-content h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: $color-text;
+}
+
+/* Textarea */
+.textarea-modal {
+  width: 100%;
+  background: transparent;
+  border: 1px solid $color-text-secundary;
+  border-radius: .75rem;
+  padding: .75rem;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: none;
+  margin-bottom: 2rem;
+  color: $color-text;
+
+  &::placeholder {
+    color: $color-text-secundary;
+    opacity: .7;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+/* Acciones */
+.modal-actions {
+  display: flex;
+  justify-content: end;
+  gap: 2rem;
+
+  button {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-cancel {
+    color: $color-text-secundary;
+
+    &:hover {
+      color: color.scale($color-text-secundary, $lightness: -20%);
+      text-decoration: underline;
+    }
+  }
+
+  .btn-confirm {
+    color: $color-primary;
+
+    &:hover {
+      color: color.scale($color-primary, $lightness: -20%);
+      text-decoration: underline;
+    }
+
+    &:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      text-decoration: none;
+    }
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,633 @@
+@use 'variables' as *;
+@use 'typography' as *;
+@use "sass:color";
+
+.pagos-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 6rem 5rem 2rem 5rem;
+  background-color: $color-bg;
+}
+
+.buscador-container {
+  display: flex;
+  justify-content:flex-start;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  margin-left: 2rem;
+  gap: 2rem;
+
+  position: relative;
+  width: 550px;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  input {
+    width: 450px;
+    padding: 12px 45px;
+    border: none;
+    border: 1px solid $color-text-secundary;
+    font-family: "Urbanist", sans-serif;
+    font-size: 1rem;
+    color: $color-text;
+    border-radius: 1rem;
+    background: $color-bg-secundary;
+    outline: none;
+    transition: all 0.3s ease;
+
+    &:focus {
+      border: 1px solid $color-primary;
+      border-radius: 1rem;
+      box-shadow: 0 0 4px rgba($color-primary, 0.4);
+    }
+
+    &:hover {
+      border: 1px solid $color-primary;
+    }
+  }
+
+  .input-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.7;
+    color: $color-text;
+  }
+
+  label {
+    position: absolute;
+    top: 50%;
+    left: 45px;
+    transform: translateY(-50%);
+    color: $color-text;
+    opacity: 0.7;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    padding: 0 6px;
+  }
+
+  input:focus + label,
+  input.has-content + label {
+    top: -8px;
+    left: 40px;
+    font-size: 0.9rem;
+    color: $color-primary;
+    opacity: 1;
+  }
+}
+
+.resultados {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+
+  background: #fff;
+  border-radius: .5rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.grupo-servicio {
+  padding: .5rem 0;
+}
+
+.categoria {
+  font-weight: 600;
+  padding: .4rem .8rem;
+  color: $color-text;
+  background: $color-bg-secundary;
+  border-radius: 4px;
+}
+
+.grupo-servicio ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.grupo-servicio li {
+  display: flex;
+  justify-content: space-between;
+  padding: .5rem 1rem;
+  cursor: pointer;
+
+
+  &:hover {
+    background: rgba($color-primary, 0.5);
+    border-radius: 4px;
+  }
+}
+
+.precio {
+  font-weight: 600;
+}
+
+// Content Pago 
+.content-pago {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.col-izquierda,
+.col-derecha {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+.col-derecha {
+  margin-top: 2rem;
+}
+
+.tittle-detalles {
+  margin-top: 2rem;
+  background-color: $color-primary;
+  border-radius: 10px;
+  padding: 0 1rem;
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+    color: white;
+  }
+}
+
+.tabla {
+  width: 100%;
+  margin-top: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: $color-bg-secundary;
+  border-radius: 12px;
+  
+
+  thead {
+    overflow: hidden;
+
+    tr th {
+      background: rgba($color-primary, 0.2);
+      padding: 0.5rem 1rem;
+      color: $color-text;
+      font-weight: 500;
+      text-align: center;
+      font-size: 1rem;
+
+      &:first-child {
+        border-top-left-radius: 12px;
+        //border-bottom-left-radius: 12px;
+        text-align: left;
+      }
+
+      &:last-child {
+        border-top-right-radius: 12px;
+        //border-bottom-right-radius: 12px;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background 0.2s ease;
+    }
+
+    // tr:hover td {
+    //   background-color: white;
+    // }
+
+    // tr:hover td:first-child {
+    //   border-top-left-radius: 12px;
+    //   border-bottom-left-radius: 12px;
+    // }
+
+    // tr:hover td:last-child {
+    //   border-top-right-radius: 12px;
+    //   border-bottom-right-radius: 12px;
+    // }
+
+    td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid #a7a8ab;
+      font-size: 1rem;
+      vertical-align: middle;
+      text-align: center;
+      transition: background-color 0.2s ease;
+
+      &:first-child {
+        text-align: left;
+        color: $color-text;
+      }
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  .cantidad-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    button {
+      justify-content: center;
+      color: $color-primary;
+      font-size: 1.3rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.2s ease;
+
+      &:hover {
+        color: $color-text-secundary;
+        background-color: transparent;
+      }
+
+      &:active {
+        transform: scale(0.9);
+      }
+    }
+
+    span {
+      min-width: 24px;
+      text-align: center;
+      font-weight: 400;
+      font-size: 1rem;
+    }
+  }
+
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: transparent;
+    border: none;
+    color: #dc2626;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.5rem;
+    transition: background 0.2s ease;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover {
+      background: rgba(220, 38, 38, 0.1);
+    }
+  }
+}
+
+
+// Card Pago
+.card-pago {
+  background: $color-bg-secundary;
+  border-radius: 1rem;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: $color-text;
+  }
+}
+
+.check-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.check-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1rem;
+  border-radius: 0.8rem;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  input[type="radio"] {
+    accent-color: $color-primary;
+    transform: scale(1.2);
+    cursor: pointer;
+  }
+
+  span {
+    font-weight: 500;
+    font-size: 1rem;
+    color: $color-text;
+  }
+
+  input:checked {
+    + span {
+      color: $color-primary;
+      font-weight: 600;
+    }
+  }
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+
+  &.right {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+
+    label {
+      margin-bottom: 0;
+    }
+
+    input {
+      width: 140px;
+      text-align: center;
+    }
+  }
+
+  label {
+    font-size: 1rem;
+    color: $color-text-secundary;
+  }
+
+  input {
+    padding: 0.6rem 0.8rem;
+    border-radius: 0.6rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    width: 250px;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 2px rgba($color-primary, 0.2);
+    }
+  }
+
+  input[type='number'] {
+    appearance: textfield;     
+    -moz-appearance: textfield;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.totales {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  .linea {
+    display: flex;
+    justify-content: end;
+    font-size: 1rem;
+    gap: 2rem;
+
+    strong {
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+
+    &.cambio {
+      color: $color-text-secundary;
+
+      strong {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+.btn-cobrar {
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  background: $color-primary;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: $color-primary-hover;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Modal Confirmar Pago
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: $color-bg-secundary;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 600px;
+  max-height: 85vh; 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.tabla-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 1rem;
+  border-radius: 0.6rem;
+}
+
+.resumen {
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.resumen-card {
+  width: 100%;
+  max-width: 320px;
+  border: 1px solid $color-primary;
+  border-radius: 0.9rem;
+  padding: 1rem 1.2rem;
+}
+
+.fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  padding: 0.3rem 0;
+
+  &.cambio strong{
+    color: $color-sucess;
+    font-weight: 600;
+  }
+
+  span {
+    color: $color-text-secundary;
+  }
+
+  strong {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $color-text-secundary;
+  }
+
+  &.descuento strong {
+    color: $color-error;
+  }
+}
+
+.separador {
+  height: 1px;
+  background: #d1d5db;
+  margin: 0.6rem 0;
+}
+
+.fila.total {
+  font-size: 1.1rem;
+
+  strong {
+    font-size: 1.2rem;
+    color: $color-text;
+  }
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-primary {
+  background-color: $color-primary; // tu color principal
+  color: #fff;
+  border: none;
+  border-radius: 0.6rem;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+
+  &:hover {
+    background-color:$color-primary-hover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:disabled {
+    background-color: #bfc4ca;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+
+.btn-secundary {
+  background-color: #f5f6f8;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    background-color: #e5e7eb;
+    border-color: #9ca3af;
+  }
+
+  &:active {
+    background-color: #d1d5db;
+  }
+}
+
+// Modal Éxito Pago
+.modal.exito {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  width: 400px;
+  animation: scaleIn 0.3s ease;
+
+  .btn-primary {
+    margin-top: 2rem;
+    width: 250px;
+  }
+
+  .icono-check {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background: #22c55e;
+    color: #fff;
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// Modal Éxito Pago
+.modal.ticket {
+  width: 500px;
+}

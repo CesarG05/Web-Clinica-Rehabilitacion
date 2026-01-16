@@ -1,0 +1,167 @@
+@use 'variables' as *;
+@use 'typography' as *;
+
+.home-container {
+  margin-top: 120px;
+  padding: 2rem;
+  position: relative;
+
+  // Blur
+  &::before {
+    content: '';
+    position:absolute;
+    top: -100px;
+    right: 15%; // Centra horizontalmente
+    width: 100rem;
+    height: 30rem;
+    background: url('../../../../../assets/img/Blur.png') no-repeat center;
+    background-size: contain;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+    // Home header (mensaje y card)
+  .home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 2rem 12rem;
+    position: relative;
+    z-index: 99;
+
+    .welcome-text,
+    .clinic-card {
+      position: relative;
+      z-index: 99;
+    }
+
+    // Texto de bienvenida
+    .welcome-text {
+      h1 {
+        font-size: 1.8rem;
+        font-weight: 500;
+        color: $color-text;
+        margin-bottom: 0.3rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+        color: $color-text;
+      }
+    }
+
+    // Card clínica
+    .clinic-card {
+      position: relative;
+      background-color: rgba($color-primary, 0.9);
+      color: $color-bg-secundary;
+      border-radius: 16px;
+      padding: 2rem 1rem 1rem 1rem; 
+      width: 300px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba($color-primary, 0.25);
+      overflow: visible; 
+
+      .logo-container {
+        position: absolute;
+        top: -45px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 80px;
+        background-color: $color-bg-secundary;
+         border: 2px solid $color-primary;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+        .clinic-logo {
+          width: 50px;
+          height: 50px;
+          object-fit: contain;
+        }
+      }
+
+      .clinic-name {
+        margin-top: 1rem; // espacio para el logo
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+    }
+  }
+
+  //Fecha
+  .date-section {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    color: $color-text;
+    margin-top: 3rem;
+    margin-bottom: 4rem;
+  }
+
+  .section-title {
+    margin-left: 6rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    color: $color-text;
+    font-weight: 600;
+    border-left: 2px solid $color-text;
+    padding-left: 15px;
+  }
+
+  .modules-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 350px));
+    gap: 5rem;
+    margin-bottom: 2rem;
+    padding: 0 10rem;
+
+    .module-card {
+      background-color: $color-bg-secundary;
+      border-radius: 14px;
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: row; 
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      height: 120px; 
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba($color-primary, 0.2);
+      }
+
+      .module-icon {
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+      }
+
+      .module-text {
+        text-align: start;
+
+        h3 {
+          margin: 0;
+          font-size: 1.1rem;
+          color: $color-text;
+          font-weight: 600;
+        }
+
+        p {
+          margin: 0;
+          font-size: 0.9rem;
+          color: rgba($color-text, 0.7)
+        }
+      }
+    }
+  }
+}

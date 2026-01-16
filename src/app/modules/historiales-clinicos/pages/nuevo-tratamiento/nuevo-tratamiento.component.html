@@ -1,0 +1,122 @@
+<div class="tratamiento-create-container">
+
+  <app-back-header titulo="Registrar nuevo tratamiento"></app-back-header>
+
+  <div class="content-tratamiento-nuevo">
+
+    <!-- COLUMNA IZQUIERDA -->
+    <section class="col-izquierda">
+      <section class="form-section">
+
+        <h3 class="tittle-form">Información del tartamiento</h3>
+
+        <app-input-field-form 
+          label="Padecimiento" 
+          [(model)]="tratamiento.padecimiento"
+          [required]="true"
+          [submitted]="submitted"
+          [errorMessage]="'El padecimiento es obligatorio'"
+          [iconPath]="'M7 16v1q0 .425.288.713T8 18t.713-.288T9 17v-1h1q.425 0 .713-.288T11 15t-.288-.712T10 14H9v-1q0-.425-.288-.712T8 12t-.712.288T7 13v1H6q-.425 0-.712.288T5 15t.288.713T6 16zm6.75-1.5h4.5q.325 0 .538-.213T19 13.75t-.213-.537T18.25 13h-4.5q-.325 0-.537.213T13 13.75t.213.538t.537.212m0 3h2.5q.325 0 .538-.213T17 16.75t-.213-.537T16.25 16h-2.5q-.325 0-.537.213T13 16.75t.213.538t.537.212M4 22q-.825 0-1.412-.587T2 20V9q0-.825.588-1.412T4 7h5V4q0-.825.588-1.412T11 2h2q.825 0 1.413.588T15 4v3h5q.825 0 1.413.588T22 9v11q0 .825-.587 1.413T20 22zm7-13h2V4h-2z'"
+        ></app-input-field-form>
+
+        <app-input-field-form 
+          label="Tratamiento" 
+          [(model)]="tratamiento.tratamiento"
+          [required]="true"
+          [submitted]="submitted"
+          [errorMessage]="'El tratamiento es obligatorio'"
+          [iconPath]="'M17 16q-1.25 0-2.125-.875T14 13t.875-2.125T17 10t2.125.875T20 13t-.875 2.125T17 16m-6 7v-2.9q0-.525.25-.987t.7-.738q.8-.475 1.688-.788t1.812-.462L17 19l1.55-1.875q.925.15 1.8.463t1.675.787q.45.275.713.738T23 20.1V23zm-2-2.9v.9H5q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v5q-.775-.975-1.75-1.487T17 8V7H7v2h7q-.5.4-.9.9t-.675 1.1H7v2h5q0 .525.113 1.025t.312.975H7v2h3.45q-.675.575-1.062 1.388T9 20.1'"
+        ></app-input-field-form>
+
+        <app-input-field-form
+          label="Observaciones generales"
+          type="textarea"
+          [(model)]="tratamiento.observaciones"
+          [submitted]="submitted"
+          iconPath="M9 18h6q.425 0 .713-.288T16 17t-.288-.712T15 16H9q-.425 0-.712.288T8 17t.288.713T9 18m0-4h6q.425 0 .713-.288T16 13t-.288-.712T15 12H9q-.425 0-.712.288T8 13t.288.713T9 14m-3 8q-.825 0-1.412-.587T4 20V4q0-.825.588-1.412T6 2h7.175q.4 0 .763.15t.637.425l4.85 4.85q.275.275.425.638t.15.762V20q0 .825-.587 1.413T18 22zm7-14q0 .425.288.713T14 9h4l-5-5z"
+        ></app-input-field-form>
+
+        <app-date-field-form
+          label="Fecha de inicio"
+          name="fechaInicio"
+          icon='M5 22q-.825 0-1.412-.587T3 20V6q0-.825.588-1.412T5 4h1V3q0-.425.288-.712T7 2t.713.288T8 3v1h8V3q0-.425.288-.712T17 2t.713.288T18 3v1h1q.825 0 1.413.588T21 6v14q0 .825-.587 1.413T19 22zm0-2h14V10H5zm7-6q-.425 0-.712-.288T11 13t.288-.712T12 12t.713.288T13 13t-.288.713T12 14m-4 0q-.425 0-.712-.288T7 13t.288-.712T8 12t.713.288T9 13t-.288.713T8 14m8 0q-.425 0-.712-.288T15 13t.288-.712T16 12t.713.288T17 13t-.288.713T16 14m-4 4q-.425 0-.712-.288T11 17t.288-.712T12 16t.713.288T13 17t-.288.713T12 18m-4 0q-.425 0-.712-.288T7 17t.288-.712T8 16t.713.288T9 17t-.288.713T8 18m8 0q-.425 0-.712-.288T15 17t.288-.712T16 16t.713.288T17 17t-.288.713T16 18'
+          [(model)]="tratamiento.fechaInicioTratamiento">
+        </app-date-field-form>
+      </section>
+      
+    </section>
+
+    <!-- COLUMNA DERECHA -->
+    <section class="col-derecha">
+      <!--  Pacientes -->
+      <section class="card-paciente">
+
+        <div class="card-tittle">
+          <h3>Seleccione al paciente</h3>
+
+          @if (tratamiento.pacienteId) {
+            <button class="btn-reset" (click)="resetPaciente()" title="Deseleccionar paciente">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20">
+                <path fill="currentColor" d="M12 20q-3.35 0-5.675-2.325T4 12t2.325-5.675T12 4q1.725 0 3.3.712T18 6.75V5q0-.425.288-.712T19 4t.713.288T20 5v5q0 .425-.288.713T19 11h-5q-.425 0-.712-.288T13 10t.288-.712T14 9h3.2q-.8-1.4-2.187-2.2T12 6Q9.5 6 7.75 7.75T6 12t1.75 4.25T12 18q1.7 0 3.113-.862t2.187-2.313q.2-.35.563-.487t.737-.013q.4.125.575.525t-.025.75q-1.025 2-2.925 3.2T12 20" />
+              </svg>
+            </button>
+          }
+        </div>
+
+        <div class="input-wrapper">
+          <span class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l5.6 5.6q.275.275.275.7t-.275.7t-.7.275t-.7-.275l-5.6-5.6q-.75.6-1.725.95T9.5 16m0-2q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
+            </svg>
+          </span>
+          <input
+            type="text"
+            placeholder="Buscar paciente..."
+            [(ngModel)]="searchPaciente"
+            (ngModelChange)="filtrarPacientes()"
+          />
+        </div>
+
+         @if (pacientes.length === 0) {
+          <p class="empty">
+            No hay paceintes registrados
+          </p>
+        } @else {
+          <ul class="list scrollable-list" [class.disabled]="tratamiento.pacienteId">
+            @for (p of pacientesFiltrados; track p.id) {
+              <li
+                class="item"
+                (click)="seleccionarPaciente(p)"
+                [class.selected]="tratamiento.pacienteId === p.id"
+              >
+              @if (tratamiento.pacienteId === p.id) {
+                <span class="check">✓</span>
+              }
+                {{ p.primerNombre }} {{ p.segundoNombre }}
+                {{ p.primerApellido }} {{ p.segundoApellido }}
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    </section>
+
+  </div>
+
+  <button
+    class="btn-save"
+    (click)="guardarTratamiento()"
+    [disabled]="
+      cargando ||
+      !tratamiento.pacienteId ||
+      !tratamiento.padecimiento ||
+      !tratamiento.fechaInicioTratamiento
+    "
+  >
+  @if (!cargando) {
+    Guardar tartamiento
+  } @else {
+    <span class="spinner"></span> Guardando...
+  }
+  </button>
+</div>

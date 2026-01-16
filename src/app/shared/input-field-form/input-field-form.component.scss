@@ -1,0 +1,170 @@
+@use 'variables' as *;
+@use 'typography' as *;
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+
+  .input-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px 20px 12px 55px;
+      border: 1px solid $color-text-secundary;
+      border-radius: 1rem;
+      background: $color-bg-secundary;
+      outline: none;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      font-family: "Urbanist", sans-serif;
+      color: $color-text;
+      resize: none;
+
+      &:focus {
+        border-color: $color-primary;
+        box-shadow: 0 0 4px rgba($color-primary, 0.4);
+      }
+
+      &:hover {
+        border-color: $color-primary;
+      }
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $color-text;
+      opacity: 0.7;
+    }
+
+    /* Label flotante */
+    label {
+      position: absolute;
+      top: 50%;
+      left: 45px;
+      transform: translateY(-50%);
+      opacity: 0.7;
+      color: $color-text;
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    input:focus + label,
+    textarea:focus + label,
+    input.has-content + label,
+    textarea.has-content + label {
+      top: -8px;
+      left: 40px;
+      font-size: 0.9rem;
+      color: $color-primary;
+      opacity: 1;
+    }
+
+    /* El input de currency NO muestra flechas */
+    .currency-input {
+      appearance: textfield;
+      -moz-appearance: textfield;
+    }
+
+    .currency-input::-webkit-outer-spin-button,
+    .currency-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  &.error input,
+  &.error textarea {
+    border-color: $color-error !important;
+    box-shadow: 0 0 4px rgba($color-error, 0.4);
+  }
+
+  .error {
+    margin-top: 6px;
+    color: $color-error;
+    font-size: 0.8rem;
+  }
+}
+
+
+// .input-wrapper {
+//   display: flex;
+//   flex-direction: column;
+//   margin-bottom: 2rem;
+
+//   .input-inner {
+//     position: relative;
+//     display: flex;
+//     align-items: center;
+
+//     input {
+//       width: 100%;
+//       padding: 12px 20px 12px 55px;
+//       border: 1px solid $color-text-secundary;
+//       border-radius: 1rem;
+//       background: $color-bg-secundary;
+//       outline: none;
+//       transition: all 0.3s ease;
+//       color: $color-text;
+//       font-size: 1rem;
+//       font-family: "Urbanist", sans-serif;
+//       color: $color-text;
+
+//       &:focus {
+//         border-color: $color-primary;
+//         box-shadow: 0 0 4px rgba($color-primary, 0.4);
+//       }
+
+//       &:hover {
+//         border-color: $color-primary;
+//       }
+//     }
+
+//     .input-icon {
+//       position: absolute;
+//       left: 15px;
+//       top: 50%;
+//       transform: translateY(-50%);
+//       color: $color-text;
+//       opacity: 0.7;
+//     }
+
+//     label {
+//       position: absolute;
+//       top: 50%;
+//       left: 45px;
+//       transform: translateY(-50%);
+//       color: $color-text;
+//       opacity: 0.7;
+//       transition: all 0.3s ease;
+//       pointer-events: none;
+//     }
+
+//     input:focus + label,
+//     input.has-content + label {
+//       top: -8px;
+//       left: 40px;
+//       font-size: 0.9rem;
+//       color: $color-primary;
+//       opacity: 1;
+//     }
+//   }
+
+//   &.error input {
+//     border-color: $color-error !important;
+//     box-shadow: 0 0 4px rgba($color-error, 0.4);
+//   }
+
+//   .error {
+//     margin-top: 6px;
+//     color: $color-error;
+//     font-size: 0.8rem;
+//   }
+// }

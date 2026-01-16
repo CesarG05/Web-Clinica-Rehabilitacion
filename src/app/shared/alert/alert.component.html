@@ -1,0 +1,35 @@
+<div class="alert-container">
+  @for (alert of alerts(); track alert) {
+    <div class="alert" 
+         [ngClass]="alert.type" 
+         (click)="dismiss(alert)">
+      
+      <span class="icon">
+        @switch (alert.type) {
+          @case ('success') {
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M9 16.2l-3.5-3.5L4 14.2l5 5 12-12-1.4-1.4z"/>
+            </svg>
+          }
+          @case ('error') {
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+          }
+          @case ('info') {
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M11 17h2v-6h-2v6zm0-8h2V7h-2v2zm1-7C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+            </svg>
+          }
+          @case ('warning') {
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+            </svg>
+          }
+        }
+      </span>
+
+      <span class="message">{{ alert.message }}</span>
+    </div>
+  }
+</div>

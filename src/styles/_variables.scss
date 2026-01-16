@@ -1,0 +1,19 @@
+@use "sass:color";
+
+// Paleta de colores 
+$color-primary: #009688;
+$color-secondary: #F8F8FB;
+
+$color-bg: #f2f2f2;
+$color-bg-secundary: #fafafa;
+
+$color-text: #1d1e25;
+$color-text-secundary: #808d9e;
+
+$color-accent: #f59e0b;
+$color-error: #e11d48;
+$color-sucess:#08a008;
+
+// Derivados
+$color-primary-hover: color.adjust($color-primary, $lightness: -8%);
+$color-secondary-hover: color.adjust($color-secondary, $lightness: -8%);

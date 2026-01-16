@@ -1,0 +1,62 @@
+@use 'variables' as *;
+
+.select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2.5rem;
+
+  label {
+    position: absolute;
+    padding: 0 6px;
+    top: -20px;
+    left: 40px;
+    font-size: 0.9rem;
+    color: $color-primary;
+  }
+
+  .select-container {
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .icono-select {
+      position: absolute;
+      left: 15px;
+      width: 25px;
+      height: 25px;
+      pointer-events: none;
+      color: $color-text;
+      opacity: 0.7;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px 40px 12px 55px;
+      border-radius: 1rem;
+      border: 1px solid $color-text-secundary;
+      background-color: $color-bg-secundary;
+      color: $color-text;
+      font-family: "Urbanist", sans-serif;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.3s ease;
+      appearance: none;
+
+      background-image: url("data:image/svg+xml;utf8,<svg fill='%231d1e25' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M11.475 14.475L7.85 10.85q-.075-.075-.112-.162T7.7 10.5q0-.2.138-.35T8.2 10h7.6q.225 0 .363.15t.137.35q0 .05-.15.35l-3.625 3.625q-.125.125-.25.175T12 14.7t-.275-.05t-.25-.175'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 32px;
+
+      &:focus {
+        border-color: $color-primary;
+        box-shadow: 0 0 4px rgba($color-primary, 0.4);
+      }
+    }
+  }
+
+  select option[disabled] {
+    color: #999;
+  }
+}

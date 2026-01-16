@@ -1,0 +1,199 @@
+<div class="historial-container">
+
+  <!-- Header -->
+  <app-back-header titulo="Historial clínico"></app-back-header>
+
+  @if (cargando) {
+    <div class="loader">
+      <img src="assets/loaders/circles.svg" />
+      <p>Cargando historial clínico...</p>
+    </div>
+  }
+
+  @if (!cargando && historial()) {
+
+    <div class="historial-layout">
+
+      <!-- Columna izquierda -->
+      <section class="card-paciente">
+
+        <div class="card-tittle">
+          <h3>Datos del paciente</h3>
+        </div>
+
+        <div class="paciente-header">
+
+          <div class="avatar-container">
+            <img
+              [src]="historial()!.paciente.sexo === 'Masculino'
+                ? 'assets/icons/avatar-hombre.png'
+                : 'assets/icons/avatar-mujer.png'"
+              alt="Avatar"
+              class="avatar-img"
+            />
+
+            <span
+              class="status-dot"
+              [class.activo]="historial()!.paciente.activo"
+              [class.bloqueado]="!historial()!.paciente.activo"
+            ></span>
+          </div>
+
+          <p class="paciente-nombre">
+            {{ historial()!.paciente.primerNombre }}
+            {{ historial()!.paciente.segundoNombre }}
+            {{ historial()!.paciente.primerApellido }}
+            {{ historial()!.paciente.segundoApellido }}
+          </p>
+
+        </div>
+
+        <p><strong>No. paciente:</strong> {{ historial()!.paciente.id }}</p>
+        <p><strong>Sexo:</strong> {{ historial()!.paciente.sexo }}</p>
+        <p><strong>Fecha de nacimiento:</strong>
+          {{ historial()!.paciente.fechaNacimiento | date:'longDate' }}
+        </p>
+        <p><strong>Edad:</strong> {{ calcularEdad(historial()!.paciente.fechaNacimiento) }} años</p>
+        <p><strong>Teléfono:</strong> {{ historial()!.paciente.telefono }}</p>
+        <p><strong>Correo electrónico:</strong> {{ historial()!.paciente.correoElectronico }}</p>
+        <p><strong>Dirección:</strong> {{ historial()!.paciente.direccion }}</p>
+
+        <!-- Botones PDF -->
+        <div class="pdf-actions">
+          <button class="btn-pdf" (click)="descargarPdf()">
+            <img src="assets/icons/pdf.png" alt="Pdf" />
+            Descargar historial clínico
+          </button>
+
+          <!-- <button class="btn-pdf" (click)="abrirPdf()">
+            <img src="assets/icons/pdf.png" alt="Pdf" />
+            Ver documento
+          </button> -->
+        </div>
+
+      </section>
+
+
+      <!-- Columna derecha -->
+      <div class="col-derecha">
+
+        <!-- Tratamientos -->
+        <div class="section-actions">
+          <button class="btn-text" [routerLink]="['../tratamientos/nuevo-tratamiento']">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20">
+                    <path fill="currentColor" d="M12 21q-.425 0-.712-.288T11 20v-7H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7V4q0-.425.288-.712T12 3t.713.288T13 4v7h7q.425 0 .713.288T21 12t-.288.713T20 13h-7v7q0 .425-.288.713T12 21" />
+                </svg>
+                Agregar tratamiento
+          </button>
+        </div>
+
+        <section class="card-tratamientos">
+
+          <div class="card-tittle">
+            <h3>Padecimientos y tratamientos</h3>
+          </div>
+
+          @if (historial()!.tratamientos.length === 0) {
+            <p class="empty">No hay tratamientos registrados</p>
+          }
+
+          @for (t of historial()!.tratamientos; track t.tratamientoId) {
+            <div class="item">
+
+              <!-- Fila superior -->
+              <div class="item-top">
+                <strong class="tratamiento-nombre">
+                  {{ t.padecimiento }}
+                </strong>
+
+                <div class="estado">
+                  <span
+                    class="dot"
+                    [class.activo]="!t.fechaFinTratamiento"
+                    [class.inactivo]="t.fechaFinTratamiento">
+                  </span>
+
+                  <span class="estado-texto">
+                    {{ !t.fechaFinTratamiento ? 'En curso' : 'Finalizado' }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Info -->
+              <p class="info-tratamiento">{{ t.tratamiento }}</p>
+
+              <p class="info-tratamiento">
+                Fecha de inicio: {{ t.fechaInicioTratamiento | date:'dd/MM/yyyy' }}
+              </p>
+
+               @if (t.fechaFinTratamiento) {
+                <p class="info-tratamiento">
+                  Fecha de terminación: {{ t.fechaFinTratamiento | date:'dd/MM/yyyy' }}
+                </p>
+              }
+
+              <div class="item-bottom">
+                <a class="details-link" [routerLink]="['../tratamientos', t.tratamientoId]" [queryParamsHandling]="'preserve'">
+                  Ver detalles
+                </a>
+              </div>
+
+            </div>
+          }
+        </section>
+
+        <!-- Sesiones (click)="irNuevaSesion()"-->
+        <div class="section-actions">
+          <button class="btn-text" [routerLink]="['/sesiones/nueva-sesion']" [queryParams]="{ pacienteId: historial()!.paciente.id}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20">
+                    <path fill="currentColor" d="M12 21q-.425 0-.712-.288T11 20v-7H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7V4q0-.425.288-.712T12 3t.713.288T13 4v7h7q.425 0 .713.288T21 12t-.288.713T20 13h-7v7q0 .425-.288.713T12 21" />
+                </svg>
+                Agregar sesión
+          </button>
+        </div>
+
+        <section class="card-sesiones">
+
+          <div class="card-tittle">
+            <h3>Sesiones no asociadas a tratamiento</h3>
+          </div>
+
+          @if (historial()!.sesionesUnicas.length === 0) {
+            <p class="empty">No hay sesiones registradas</p>
+          }
+          
+          @for (s of historial()!.sesionesUnicas; track s.id) {
+            <app-session-item
+              [sesion]="s"
+              (verNotas)="verNotasSesion($event)"
+              (cambiarEstado)="cambiarEstadoSesion($event)"
+              (eliminar)="eliminarSesion($event)">
+            </app-session-item>
+          }
+        </section>
+
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Confirm Modal -->
+@if(modalAbierto) {
+<app-confirm-modal
+  [title]="modalTitle"
+  [message]="modalMessage"
+  (confirm)="modalConfirmCallback && modalConfirmCallback(); cerrarModal()"
+  (cancel)="cerrarModal()">
+</app-confirm-modal>
+}
+
+<!-- Modal estados -->
+@if(modalEstadoAbierto) {
+<app-select-modal
+  title="Seleccione el estado de la sesión"
+  [options]="estadosSesion"
+  [selectedValue]="sesionSeleccionado?.estado?.estadoId"
+  (confirm)="onConfirmRol($event)"
+  (cancel)="modalEstadoAbierto = false">
+</app-select-modal>
+}

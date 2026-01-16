@@ -1,0 +1,195 @@
+<div class="reportes-container">
+  <app-back-header titulo="Reportes"></app-back-header>
+
+  <!-- DASHBOARD GENERAL -->
+  <section class="dashboard">
+    @if (dashboardClinica) {
+
+      <div class="dashboard-grid">
+
+        <!-- PACIENTES -->
+        <div class="dashboard-card">
+          <h3>Pacientes</h3>
+
+          <canvas #chartPacientes></canvas>
+
+          <div class="info">
+            <div>
+              <span>Nuevos pacientes hoy</span>
+              <strong>{{ dashboardClinica.nuevosPacientesHoy }}</strong>
+            </div>
+            <div>
+              <span>Nuevos pacientes este mes</span>
+              <strong>{{ dashboardClinica.nuevosPacientesMes }}</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- SERVICIOS -->
+        <div class="dashboard-card">
+          <h3>Servicios</h3>
+
+          <canvas #chartServicios></canvas>
+
+          <div class="info">
+            <div>
+              <span>Servicios más usados este mes</span>
+            </div>
+          </div>
+
+          <ul class="lista">
+            @for (s of dashboardClinica.serviciosMasUsadosMes; track s.servicioId) {
+              <li>
+                {{ s.nombre }}
+                <strong>{{ s.total }}</strong>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <!-- SESIONES -->
+        <div class="dashboard-card">
+          <h3>Sesiones</h3>
+
+          <canvas #chartSesiones></canvas>
+
+          <div class="info">
+            <div>
+              <span>Sesiones hoy</span>
+              <strong>{{ dashboardClinica.sesionesHoy }}</strong>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    } @else {
+      <div class="loader">
+        <img src="assets/loaders/circles.svg" />
+        <p>Cargando dashboard...</p>
+      </div>
+    }
+  </section>
+
+  <!-- REPORTE INGRESOS -->
+  <section class="reporte-ingresos">
+    @if (reporteIngresos) {
+
+      <div class="resumen-ingresos">
+        <div>
+          <span>Total de ingresos</span>
+          <strong>${{ reporteIngresos.totalIngresos | currency:'MXN':'code':'1.2-2' }}</strong>
+        </div>
+
+        <div>
+          <span>Total en descuentos</span>
+          <strong>${{ reporteIngresos.totalDescuentos | currency:'MXN':'code':'1.2-2' }}</strong>
+        </div>
+
+         <div>
+          <span>Total de pagos</span>
+          <strong>{{ reporteIngresos.totalPagos }}</strong>
+        </div>
+      </div>
+
+      <div class="resumen-ingresos metodo">
+        <div>
+          <span>Total en efectivo</span>
+          <strong>${{ totalEfectivo | currency:'MXN':'symbol':'1.2-2' }}</strong>
+        </div>
+
+        <div>
+          <span>Total en tarjeta</span>
+          <strong>${{ totalTarjeta | currency:'MXN':'code':'1.2-2' }}</strong>
+        </div>
+      </div>
+
+      <div class="filtros-ingresos">
+
+        <!-- RANGO DE FECHAS -->
+        <div class="rango-fechas">
+          <div class="campo">
+            <label>Desde</label>
+            <input type="date" [(ngModel)]="fechaInicio" />
+          </div>
+
+          <div class="campo">
+            <label>Hasta</label>
+            <input type="date" [(ngModel)]="fechaFin" />
+          </div>
+
+          <button class="btn-aplicar" (click)="aplicarFiltro()">
+            Aplicar
+          </button>
+        </div>
+
+        <!-- PRESETS -->
+        <div class="presets">
+          <button
+            [class.activo]="presetActivo === '7dias'"
+            (click)="presetUltimos7()">
+            Últimos 7 días
+          </button>
+
+          <button
+            [class.activo]="presetActivo === 'mes'"
+            (click)="presetMesActual()">
+            Mes actual
+          </button>
+
+          <button
+            [class.activo]="presetActivo === 'anio'"
+            (click)="presetAnioActual()">
+            Año actual
+          </button>
+        </div>
+
+        <!-- ACCIÓN PDF -->
+        <div class="acciones">
+          <button class="btn-pdf" (click)="descargarPdfIngresos()">
+            Descargar reporte
+          </button>
+        </div>
+
+      </div>
+
+
+      <div class="grafica-card">
+      <h3>Ingresos del {{ fechaInicio | date: 'dd/MM/yyyy' }} al {{ fechaFin | date: 'dd/MM/yyyy' }}</h3>
+        <canvas #chartIngresos></canvas>
+      </div>
+
+      <div class="tabla-card">
+        <h3>Detalle de pagos</h3>
+
+        <table>
+          <thead>
+            <tr>
+              <th>ID Pago</th>
+              <th>Fecha</th>
+              <th>Método</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (p of reporteIngresos.pagos; track p.pagoId) {
+              <tr>
+                <td>{{ p.pagoId }}</td>
+                <td>{{ p.fechaPago | date:'dd/MM/yyyy' }}</td>
+                <td>{{ p.metodoPago }}</td>
+                <td>${{ p.totalNeto }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+    } @else {
+      <div class="loader">
+        <img src="assets/loaders/circles.svg" alt="Cargando..." />
+        <p>Cargando reporte de ingresos...</p>
+      </div>
+    }
+  </section>
+</div>

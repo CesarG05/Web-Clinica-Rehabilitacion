@@ -1,0 +1,55 @@
+<div class="input-wrapper" [class.error]="required && submitted && !model">
+
+  <div class="input-inner">
+
+    @if(iconPath){
+      <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+        <path fill="currentColor" [attr.d]="iconPath" />
+      </svg>
+    }
+
+    <!-- Textarea -->
+    @if(type === 'textarea'){
+      <textarea
+        rows="4"
+        [(ngModel)]="model"
+        (ngModelChange)="modelChange.emit($event)"
+        [placeholder]="placeholder"
+        [class.has-content]="model?.length > 0"
+      ></textarea>
+      <label>{{ label }}</label>
+    }
+
+    <!-- Currency -->
+    @else if(type === 'currency'){
+      <input
+        type="text"
+        [placeholder]="placeholder"
+        (input)="onCurrencyInput($event)"
+        (blur)="onCurrencyBlur()"
+        class="currency-input"
+        [class.has-content]="!!model"
+      />
+      <label>{{ label }}</label>
+    }
+
+    <!-- Input normal -->
+    @else{
+      <input
+        [type]="type"
+        [step]="step"
+        [(ngModel)]="model"
+        (ngModelChange)="modelChange.emit($event)"
+        [placeholder]="placeholder"
+        [class.has-content]="!!model"
+      />
+      <label>{{ label }}</label>
+    }
+
+  </div>
+
+  @if(required && submitted && !model){
+    <small class="error">{{ errorMessage }}</small>
+  }
+</div>
+

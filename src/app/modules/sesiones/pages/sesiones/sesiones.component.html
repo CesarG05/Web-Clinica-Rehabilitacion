@@ -1,0 +1,150 @@
+<div class="sesiones-container">
+
+  <app-back-header titulo="Control de sesiones"></app-back-header>
+
+  <!-- Top bar -->
+  <div class="top-bar">
+    <app-input-field
+      type="text"
+      label="Buscar sesión"
+      [iconPath]="'M10 2a8 8 0 1 0 5.29 14.29l4.15 4.15l1.41-1.41l-4.15-4.15A8 8 0 0 0 10 2m0 2a6 6 0 1 1 0 12A6 6 0 0 1 10 4Z'"
+      [(model)]="searchText"
+      (search)="buscar($event)">
+    </app-input-field>
+
+    <button class="btn-agregar" routerLink="nueva-sesion">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 21q-.425 0-.712-.288T11 20v-7H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7V4q0-.425.288-.712T12 3t.713.288T13 4v7h7q.425 0 .713.288T21 12t-.288.713T20 13h-7v7q0 .425-.288.713T12 21" />
+      </svg>
+      <span>Nueva sesión</span>
+    </button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters">
+    <div class="buttons">
+      <button [class.active]="estadoFilter === 1" (click)="cambiarEstadoFilter(1)">Pedientes</button>
+      <button [class.active]="estadoFilter === 2" (click)="cambiarEstadoFilter(2)">Realizadas</button>
+      <button [class.active]="estadoFilter === 3" (click)="cambiarEstadoFilter(3)">Canceladas</button>
+      <button [class.active]="estadoFilter === null" (click)="cambiarEstadoFilter(null)">Todas</button>
+    </div>
+
+    <div class="orden">
+      <label>Ordenar:</label>
+      <select [(ngModel)]="orden" (change)="cambiarOrden(orden)">
+        <option value="recientes">Recientes</option>
+        <option value="antiguos">Antiguos</option>
+      </select>
+    </div>
+
+    <p class="total">Total: {{ total() }}</p>
+  </div>
+
+  <!-- Loader -->
+   @if (cargando) {
+    <div class="loader">
+      <img src="assets/loaders/circles.svg" alt="Cargando..." />
+      <p>Cargando sesiones...</p>
+    </div>
+  }
+
+  <!-- Sin resultados -->
+  @if (!cargando && sesiones().length === 0) {
+    <div class="no-results">
+      <p>No hay sesiones encontradas</p>
+    </div>
+  }
+
+  <!-- Tabla -->
+  @if (!cargando && sesiones().length > 0) {
+    <div class="table-wrapper">
+      <table class="sesiones-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Servicio</th>
+            <th>Estado</th>
+            <th>Nombre del paciente</th>
+            <th>Fecha registro</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (s of sesiones(); track s.id) {
+            <tr>
+              <td>#{{ s.id }}</td>
+              <td>{{ s.servicio.nombreServicio }}</td>
+
+              <td>
+                <span
+                class="estado"
+                [ngClass]="{
+                    'pendiente': s.estado.estado === 'Pendiente',
+                    'realizado': s.estado.estado === 'Realizado',
+                    'cancelado': s.estado.estado === 'Cancelado'
+                }"
+                >
+                {{ s.estado.estado }}
+                </span>
+              </td>
+
+              <td>{{ s.paciente.nombrePaciente }}</td>
+
+              <td>{{ s.fechaRegistro | date:'dd/MM/yyyy HH:mm' }}</td>
+
+              <td class="acciones">
+                <button class="menu-btn" (click)="toggleMenu(s.id, $event)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="3.75"
+                            d="M12 12h.01v.01H12zm0-7h.01v.01H12zm0 14h.01v.01H12z" />
+                    </svg>
+                </button>
+
+                @if (menuAbiertoId() === s.id) {
+                  <div class="menu-dropdown">
+                    <button (click)="verNotasSesion(s)">Ver notas</button>
+                    <button (click)="cambiarEstadoSesion(s)">Cambiar estado</button>
+                    <button class="delete" (click)="eliminarSesion(s)">Eliminar sesión</button>
+                  </div>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <!-- Paginación -->
+  @if (!cargando && (hasPreviousPage() || hasNextPage())) {
+    <div class="pagination">
+      <button (click)="paginaAnterior()" [disabled]="!hasPreviousPage()">Anterior</button>
+      <span>Página {{ pageNumber() }}</span>
+      <button (click)="siguientePagina()" [disabled]="!hasNextPage()">Siguiente</button>
+    </div>
+  }
+
+</div>
+
+
+<!-- Confirm Modal -->
+@if(modalAbierto) {
+<app-confirm-modal
+  [title]="modalTitle"
+  [message]="modalMessage"
+  (confirm)="modalConfirmCallback && modalConfirmCallback(); cerrarModal()"
+  (cancel)="cerrarModal()">
+</app-confirm-modal>
+}
+
+<!-- Modal estados -->
+@if(modalEstadoAbierto) {
+<app-select-modal
+  title="Seleccione el estado de la sesión"
+  [options]="estadosSesion"
+  [selectedValue]="sesionSeleccionado?.estado?.estadoId"
+  (confirm)="onConfirmRol($event)"
+  (cancel)="modalEstadoAbierto = false">
+</app-select-modal>
+}
