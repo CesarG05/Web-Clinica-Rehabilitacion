@@ -1,7 +1,8 @@
-@use 'variables' as *;  
-@use 'typography' as *; 
+@use 'variables' as *;
+@use 'typography' as *;
 @use "sass:color";
 
+/* Navbar */
 .navbar {
   position: fixed;
   top: 0;
@@ -17,7 +18,12 @@
   box-shadow: 0 2px 6px rgba($color-primary, 0.2);
   z-index: 999;
 
-  .navbar-left, .navbar-right {
+  /* Fix blur Chromium */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+
+  .navbar-left,
+  .navbar-right {
     display: flex;
     align-items: center;
   }
@@ -27,7 +33,10 @@
     border: none;
     cursor: pointer;
     margin-right: 2.5rem;
-    svg { fill: $color-text; }
+
+    svg {
+      fill: $color-text;
+    }
   }
 
   .nav-item {
@@ -39,41 +48,71 @@
     font-size: 1rem;
     color: $color-text;
     text-decoration: none;
+    transition: color 0.2s ease;
 
-    img {
-      width: 22px;
-      height: 22px;
-      margin-right: 0.5rem;
-      object-fit: contain;
-      transition: background-color 0.3s ease;
-
-       /* Convertimos el ícono en máscara */
-      mask-size: contain;
-      mask-repeat: no-repeat;
-      mask-position: center;
-      background-color: $color-text; // color inicial
-    }
-
-    &.active {
-      color: $color-primary;
-      font-weight: 600;
-
-      img {
-        background-color: $color-primary;
-      }
-    }
-
+    &.active,
     &:hover {
       color: $color-primary;
       font-weight: 600;
 
-      img {
+      .icon {
         background-color: $color-primary;
       }
     }
   }
 
-  .logo-container .logo { width: 40px; height: 40px; }
+  .logo-container .logo {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Iconos con mask*/
+.icon {
+  width: 22px;
+  height: 22px;
+  margin-right: 0.5rem;
+  display: inline-block;
+  background-color: $color-text;
+
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+/* Icon mapping */
+.icon.home {
+  mask-image: url('/assets/icons/home.png');
+  -webkit-mask-image: url('/assets/icons/home.png');
+}
+
+.icon.pacientes {
+  mask-image: url('/assets/icons/pacientes.png');
+  -webkit-mask-image: url('/assets/icons/pacientes.png');
+}
+
+.icon.servicios {
+  mask-image: url('/assets/icons/servicios.png');
+  -webkit-mask-image: url('/assets/icons/servicios.png');
+}
+
+.icon.pagos {
+  mask-image: url('/assets/icons/transacciones.png');
+  -webkit-mask-image: url('/assets/icons/transacciones.png');
+}
+
+.icon.reportes {
+  mask-image: url('/assets/icons/reportes.png');
+  -webkit-mask-image: url('/assets/icons/reportes.png');
+}
+
+.icon.usuarios {
+  mask-image: url('/assets/icons/usuarios.png');
+  -webkit-mask-image: url('/assets/icons/usuarios.png');
 }
 
 /* Overlay para cerrar drawer */

@@ -7,35 +7,35 @@
     </button>
 
     <a class="nav-item" routerLink="/inicio" [class.active]="isActive('/inicio')">
-      <img style="mask-image: url('assets/icons/home.png'); -webkit-mask-image: url('assets/icons/home.png');" alt="Inicio"/>
+      <span class="icon home"></span>
       Inicio
     </a>
 
     <a class="nav-item" routerLink="/pacientes" [class.active]="isActive('/pacientes')">
-      <img style="mask-image: url('assets/icons/pacientes.png'); -webkit-mask-image: url('assets/icons/pacientes.png');" alt="Pacientes"/>
+      <span class="icon pacientes"></span>
       Pacientes
     </a>
 
     <a class="nav-item" routerLink="/servicios" [class.active]="isActive('/servicios')">
-      <img style="mask-image: url('assets/icons/servicios.png'); -webkit-mask-image: url('assets/icons/servicios.png');" alt="Servicios" />
+      <span class="icon servicios"></span>
       Servicios
     </a>
 
     @if (user?.rol !== 'fisioterapeuta') {
       <a class="nav-item" routerLink="/pagos" [class.active]="isActive('/pagos')">
-        <img style="mask-image: url('assets/icons/transacciones.png'); -webkit-mask-image: url('assets/icons/transacciones.png');" alt="Transacciones"/>
+        <span class="icon pagos"></span>
         Transacciones
       </a>
     }
 
     @if (user?.rol === 'administrador') {
       <a class="nav-item" routerLink="/reportes" [class.active]="isActive('/reportes')">
-        <img style="mask-image: url('assets/icons/reportes.png'); -webkit-mask-image: url('assets/icons/reportes.png');" alt="Reportes"/>
+        <span class="icon reportes"></span>
         Reportes
       </a>
 
       <a class="nav-item" routerLink="/usuarios" [class.active]="isActive('/usuarios')">
-        <img style="mask-image: url('assets/icons/usuarios.png'); -webkit-mask-image: url('assets/icons/usuarios.png');" alt="Usuarios"/>
+        <span class="icon usuarios"></span>
         Usuarios
       </a>
     }
@@ -89,18 +89,6 @@
       color="#9109db"
       (itemClick)="closeMenu()">
     </app-drawer-item>
-
-    <!-- <app-drawer-item
-      routerLink="/usuarios"
-      [active]="isActive('/usuarios')"
-      icon="users"
-      title="Usuarios"
-      subtitle="Administrar usuarios de la clinica"
-      color="#d59114"
-      (itemClick)="closeMenu()">
-    </app-drawer-item> -->
-
-    <!-- Otros items aquí... -->
 
   </div>
 
